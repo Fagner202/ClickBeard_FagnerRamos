@@ -70,5 +70,5 @@ ClickBeard_FagnerRamos/
 - Cadastro de barbeiros e especialidades
 - Agendamento com regras de negócio
 - Painel de visualização para administrador
-- Diagrama ER
-- Scripts SQL de criação do banco
+- Diagrama ER OK
+- Scripts SQL de criação do banco OK
