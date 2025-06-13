@@ -44,6 +44,20 @@ DB_PASSWORD=click123
 docker-compose up -d --build
 ```
 
+### 4. Instale as dependências do Composer
+
+Acesse o container do PHP:
+
+```bash
+docker exec -it clickbeard-php bash
+```
+
+Dentro do container, instale o pacote JWT:
+
+```bash
+composer require firebase/php-jwt
+```
+
 Acesse a aplicação em: [http://localhost:8080](http://localhost:8080)
 
 Acesse o phpMyAdmin em: [http://localhost:8081](http://localhost:8081)
