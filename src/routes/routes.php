@@ -21,6 +21,20 @@ switch ($uri) {
         }
         break;
 
+    case '/agendamentos':
+        if (
+            isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+        ) {
+            require __DIR__ . '/../middleware/auth.php';
+            $usuario = autenticarUsuario();
+            header('Content-Type: application/json');
+            echo json_encode(['mensagem' => 'Acesso autorizado', 'usuario' => $usuario]);
+            exit;
+        }
+        require __DIR__ . '/../views/agendamento.php';
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(['erro' => 'Rota não encontrada']);
