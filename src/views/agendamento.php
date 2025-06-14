@@ -11,25 +11,25 @@ ob_start(); ?>
 <button id="btnBuscarAgendamentos" class="btn btn-primary d-block mx-auto mt-4">Buscar Agendamentos</button>
 <pre id="resultadoAgendamentos" class="mt-3 bg-light p-3 rounded"></pre>
 
+
 <script>
-document.getElementById('btnBuscarAgendamentos').addEventListener('click', async function() {
     const token = localStorage.getItem('token');
-    if (!token) {
-        document.getElementById('resultadoAgendamentos').innerText = 'Token não encontrado. Faça login.';
-        return;
+    console.log('Token no localStorage:', token);
+
+    fetch('/agendamentos', {
+    method: 'GET',
+    headers: {
+        'Authorization': `Bearer ${token}`,
+        'X-Requested-With': 'XMLHttpRequest'
     }
-
-    const response = await fetch('/agendamentos', {
-        headers: {
-            'Authorization': 'Bearer ' + token,
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    });
-
-    const data = await response.json();
-    document.getElementById('resultadoAgendamentos').innerText = JSON.stringify(data, null, 2);
-});
+    })
+    .then(response => response.json())
+    .then(data => {
+    console.log('Resposta da API:', data);
+    })
+    .catch(e => console.error(e));
 </script>
+
 <?php
 $content = ob_get_clean();
 require __DIR__ . '/layout.php';

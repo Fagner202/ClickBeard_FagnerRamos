@@ -22,16 +22,24 @@ switch ($uri) {
         break;
 
     case '/agendamentos':
+        // Log dos headers recebidos para debug
+        error_log('Headers recebidos: ' . json_encode(getallheaders()));
+
+        require __DIR__ . '/../middleware/auth.php';
+        $usuario = autenticarUsuario();
+
+        // Se a requisição for AJAX (fetch), retorna JSON
         if (
             isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
         ) {
-            require __DIR__ . '/../middleware/auth.php';
-            $usuario = autenticarUsuario();
+            // Aqui você pode retornar os dados de agendamento em JSON
             header('Content-Type: application/json');
             echo json_encode(['mensagem' => 'Acesso autorizado', 'usuario' => $usuario]);
             exit;
         }
+
+        // Se não for AJAX, renderiza a view normalmente
         require __DIR__ . '/../views/agendamento.php';
         break;
 
