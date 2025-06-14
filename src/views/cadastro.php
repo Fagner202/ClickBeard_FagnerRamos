@@ -1,45 +1,53 @@
 <?php
-// public/cadastro.php
-?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Cadastro - ClickBeard</title>
-</head>
-<body>
-    <h2>Cadastro</h2>
-    <form id="cadastroForm">
-        <input type="text" name="nome" placeholder="Nome" required><br>
-        <input type="email" name="email" placeholder="E-mail" required><br>
-        <input type="password" name="senha" placeholder="Senha" required><br>
-        <button type="submit">Cadastrar</button>
-    </form>
+// src/views/cadastro.php
 
-    <div id="mensagem"></div>
+$title = 'Cadastro - ClickBeard';
 
-    <script>
-        document.getElementById('cadastroForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+ob_start(); ?>
 
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
+<h2 class="mb-4 text-center">Cadastro</h2>
+<form id="cadastroForm" class="bg-white p-4 rounded shadow-sm">
+    <div class="mb-3">
+        <input type="text" name="nome" class="form-control" placeholder="Nome completo" required>
+    </div>
+    <div class="mb-3">
+        <input type="email" name="email" class="form-control" placeholder="E-mail" required>
+    </div>
+    <div class="mb-3">
+        <input type="password" name="senha" class="form-control" placeholder="Senha" required>
+    </div>
+    <div class="mb-3">
+        <input type="password" name="confirmar_senha" class="form-control" placeholder="Confirmar senha" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+</form>
+<div id="mensagem" class="mt-3 text-center text-danger"></div>
 
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+<script>
+    document.getElementById('cadastroForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-            const result = await response.json();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
 
-            if (response.ok) {
-                document.getElementById('mensagem').innerText = 'Cadastro realizado com sucesso!';
-                localStorage.setItem('token', result.token);
-            } else {
-                document.getElementById('mensagem').innerText = result.erro || 'Erro no cadastro';
-            }
+        const response = await fetch('/cadastro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
-    </script>
-</body>
-</html>
+
+        const result = await response.json();
+
+        document.getElementById('mensagem').innerText = response.ok
+            ? 'Cadastro realizado com sucesso!'
+            : (result.erro || 'Erro no cadastro');
+
+        if (response.ok) {
+            localStorage.setItem('token', result.token);
+        }
+    });
+</script>
+<?php
+
+$content = ob_get_clean();
+require __DIR__ . '/layout.php';

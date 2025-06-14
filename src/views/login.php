@@ -1,44 +1,45 @@
 <?php
-// public/login.php
-?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - ClickBeard</title>
-</head>
-<body>
-    <h2>Login</h2>
-    <form id="loginForm">
-        <input type="email" name="email" placeholder="E-mail" required><br>
-        <input type="password" name="senha" placeholder="Senha" required><br>
-        <button type="submit">Entrar</button>
-    </form>
+// src/views/login.php
 
-    <div id="mensagem"></div>
+$title = 'Login - ClickBeard';
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+ob_start(); ?>
+<h2 class="mb-4 text-center">Login</h2>
+<form id="loginForm" class="bg-white p-4 rounded shadow-sm">
+    <div class="mb-3">
+        <input type="email" name="email" class="form-control" placeholder="E-mail" required>
+    </div>
+    <div class="mb-3">
+        <input type="password" name="senha" class="form-control" placeholder="Senha" required>
+    </div>
+    <button type="submit" class="btn btn-success w-100">Entrar</button>
+</form>
+<div id="mensagem" class="mt-3 text-center text-danger"></div>
 
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
 
-            const result = await response.json();
-
-            if (response.ok) {
-                document.getElementById('mensagem').innerText = 'Login realizado com sucesso!';
-                localStorage.setItem('token', result.token);
-            } else {
-                document.getElementById('mensagem').innerText = result.erro || 'Erro no login';
-            }
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
-    </script>
-</body>
-</html>
+
+        const result = await response.json();
+
+        document.getElementById('mensagem').innerText = response.ok
+            ? 'Login realizado com sucesso!'
+            : (result.erro || 'Erro no login');
+
+        if (response.ok) {
+            localStorage.setItem('token', result.token);
+        }
+    });
+</script>
+<?php
+$content = ob_get_clean();
+require __DIR__ . '/layout.php';
