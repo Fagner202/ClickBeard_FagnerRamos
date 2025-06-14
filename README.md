@@ -49,7 +49,7 @@ docker-compose up -d --build
 Acesse o container do PHP:
 
 ```bash
-docker exec -it clickbeard-php bash
+docker exec -it clickbeard_php bash
 ```
 
 Dentro do container, instale o pacote JWT:
