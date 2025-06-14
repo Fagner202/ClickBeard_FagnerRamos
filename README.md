@@ -58,6 +58,44 @@ Dentro do container, instale o pacote JWT:
 composer require firebase/php-jwt
 ```
 
+### 5. Testando as rotas de registro e login
+
+Após instalar o JWT, rode o servidor embutido do PHP dentro do container:
+
+```bash
+php -S 0.0.0.0:8000 -t /var/www/html/public
+```
+
+Agora, você pode testar as rotas no Postman:
+
+- **Registro:**  
+  `POST http://localhost:8000/register`
+
+- **Login:**  
+  `POST http://localhost:8000/login`
+
+**Headers:**  
+`Content-Type: application/json`
+
+**Body (raw JSON):**
+
+Para registro:
+```json
+{
+  "nome": "Fagner Ramos",
+  "email": "fagner@clickbeard.com",
+  "senha": "123456"
+}
+```
+
+Para login:
+```json
+{
+  "email": "fagner@clickbeard.com",
+  "senha": "123456"
+}
+```
+
 Acesse a aplicação em: [http://localhost:8080](http://localhost:8080)
 
 Acesse o phpMyAdmin em: [http://localhost:8081](http://localhost:8081)
