@@ -19,12 +19,13 @@ class JWTHandler {
         return JWT::encode($payload, self::$secret_key, self::$algoritmo);
     }
 
-    public static function validarToken(string $jwt): ?array {
-        try {
-            $decodificado = JWT::decode($jwt, new Key(self::$secret_key, self::$algoritmo));
-            return (array) $decodificado->data;
-        } catch (Exception $e) {
-            return null;
-        }
+    function validarJWT($token) {
+        // Implemente sua validação de token
+        // Exemplo simplificado:
+        $partes = explode('.', $token);
+        if (count($partes) !== 3) return false;
+        
+        $payload = json_decode(base64_decode($partes[1]), true);
+        return ($payload['exp'] > time());
     }
 }

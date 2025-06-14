@@ -18,27 +18,25 @@ ob_start(); ?>
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-
-        document.getElementById('mensagem').innerText = response.ok
-            ? 'Login realizado com sucesso!'
-            : (result.erro || 'Erro no login');
-
-        if (response.ok) {
-            localStorage.setItem('token', result.token);
-        }
+    const formData = new FormData(this);
+    const response = await fetch('/login', {
+        method: 'POST',
+        body: formData
     });
+
+    const result = await response.json();
+    const mensagemDiv = document.getElementById('mensagem');
+    
+    if (result.sucesso) {
+        localStorage.setItem('token', result.token);
+        // Redireciona para agendamentos
+        window.location.href = result.redirect;
+    } else {
+        mensagemDiv.innerText = result.erro || 'Erro no login';
+    }
+});
 </script>
 <?php
 $content = ob_get_clean();
