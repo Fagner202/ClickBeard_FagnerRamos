@@ -4,6 +4,12 @@ require_once __DIR__ . '/../config/database.php';
 
 class User
 {
+    /**
+     * Busca um registro de cliente pelo endereço de e-mail.
+     *
+     * @param string $email O endereço de e-mail do cliente a ser buscado.
+     * @return array|false Retorna um array associativo com os dados do cliente se encontrado, ou false caso contrário.
+     */
     public static function findByEmail($email)
     {
         global $pdo; // Supondo que $pdo é definido em database.php
