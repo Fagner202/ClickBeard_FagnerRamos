@@ -47,6 +47,7 @@ switch ($uri) {
 
     case '/agendamentos':
         require_once __DIR__ . '/../middleware/auth.php';
+        $usuario = autenticarUsuario();
         require __DIR__ . '/../views/agendamento.php';
         break;
 

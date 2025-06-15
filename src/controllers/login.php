@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($usuario && password_verify($senha, $usuario['senha'])) {
         $token = JWTHandler::gerarToken([
             'id' => $usuario['id'],
-            'email' => $usuario['email']
+            'email' => $usuario['email'],
+            'nome' => $usuario['nome']
         ]);
 
         // Define o token como cookie com 1h de validade
