@@ -23,6 +23,7 @@ switch ($uri) {
         break;
 
     case '/agendamentos':
+        require_once __DIR__ . '/../middleware/auth.php';
         require __DIR__ . '/../views/agendamento.php';
         break;
 
