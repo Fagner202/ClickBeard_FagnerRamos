@@ -2,9 +2,13 @@
 // src/routes/routes.php
 require_once __DIR__ . '/../utils/utils.php';
 require_once __DIR__ . '/../helpers.php';
+require_once __DIR__ . '/../controllers/BarbeiroController.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
+
+$pdo = require_once __DIR__ . '/../config/database.php';
+$barbeiroController = new BarbeiroController($pdo);
 
 /**
  * Gerenciamento de rotas da aplicação.
@@ -66,29 +70,25 @@ switch ($uri) {
     case '/barbeiros':
         // dd('Rota barbeiros');
         require_once __DIR__ . '/../middleware/auth.php';
-        require_once __DIR__ . '/../controllers/BarbeiroController.php';
         $usuario = autenticarUsuario();
 
-        require_once __DIR__ . '/../controllers/BarbeiroController.php';
-        listarBarbeiros();
+        
+        $barbeiroController->index();
         break;
 
     case '/barbeiros/criar':
         require_once __DIR__ . '/../middleware/auth.php';
-        require_once __DIR__ . '/../controllers/BarbeiroController.php';
         if ($method === 'POST') {
-            // dd('Criando barbeiro com cliente...');
-            criarBarbeiroComCliente();
+            $barbeiroController->criarBarbeiroComCliente();
         } else {
             http_response_code(405);
             echo 'Método não permitido.';
         }
         break;
 
-    case '/barbeiros/delete':
-        require_once __DIR__ . '/../controllers/BarbeiroController.php';
+    case '/barbeiros/deletar':
         if ($method === 'GET' && isset($_GET['id'])) {
-            deletarBarbeiro($_GET['id']);
+            $barbeiroController->deletarBarbeiro($_GET['id']);
         }
         break;
 

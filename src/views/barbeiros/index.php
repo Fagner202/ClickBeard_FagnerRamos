@@ -6,6 +6,8 @@ $usuario = autenticarUsuario();
 $title = 'Gerenciar Barbeiros';
 $cssPage = ''; // Nenhum CSS específico por enquanto
 
+// dd($barbeiros);
+
 ob_start();
 ?>
 

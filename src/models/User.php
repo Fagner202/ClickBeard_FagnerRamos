@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../config/database.php';
-
 class User
 {
     /**
@@ -12,7 +10,7 @@ class User
      */
     public static function findByEmail($email)
     {
-        global $pdo; // Supondo que $pdo é definido em database.php
+        $pdo = require __DIR__ . '/../config/database.php';
         $stmt = $pdo->prepare('SELECT * FROM clientes WHERE email = :email LIMIT 1');
         $stmt->execute(['email' => $email]);
         return $stmt->fetch();
