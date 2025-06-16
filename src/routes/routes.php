@@ -57,8 +57,10 @@ switch ($uri) {
         require_once __DIR__ . '/../controllers/logout.php';
         break;
 
-    case '/':
-        renderView('home', ['title' => 'Home'], false);
+    case '/teste':
+        require_once __DIR__ . '/../middleware/auth.php';
+        $usuario = autenticarUsuario();
+        renderView('teste', ['title' => 'Home'], false);
         break;
 
     default:

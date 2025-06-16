@@ -1,17 +1,35 @@
 <?php
+
 function renderView(string $view, array $data = [], bool $auth = true): void
 {
-    // Extrai variáveis do array para serem acessadas como $title, $cssPage etc.
+    // Extrai as variáveis do array para uso direto na view
     extract($data);
+
+    // Caminho absoluto para a view
+    $viewPath = __DIR__ . "/views/{$view}.php";
+
+    // Verifica se o arquivo da view existe
+    if (!file_exists($viewPath)) {
+        http_response_code(404);
+        echo "Erro 404: View '{$view}' não encontrada.";
+        exit;
+    }
 
     // Captura o conteúdo da view
     ob_start();
-    require __DIR__ . "/views/{$view}.php";
+    require $viewPath;
     $content = ob_get_clean();
 
-    // Define o layout a ser usado
+    // Define o layout (auth ou guest)
     $layout = $auth ? 'auth_layout.php' : 'guest_layout.php';
 
-    // dd($layout);
-    require __DIR__ . "/views/layouts/{$layout}";
+    $layoutPath = __DIR__ . "/views/layouts/{$layout}";
+
+    if (!file_exists($layoutPath)) {
+        http_response_code(500);
+        echo "Erro: Layout '{$layout}' não encontrado.";
+        exit;
+    }
+
+    require $layoutPath;
 }

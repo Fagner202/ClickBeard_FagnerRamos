@@ -25,10 +25,10 @@ $usuario = $_SESSION['nome'] ?? null;
             <p class="text-light mb-0">Sistema de Agendamento</p>
         </div>
         <ul class="nav flex-column pt-3">
-            <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-calendar-plus"></i> Novo Agendamento</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/agendamentos"><i class="bi bi-house-door"></i> Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="/teste"><i class="bi bi-calendar-plus"></i> Novo Agendamento</a></li>
             <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-scissors"></i> Barbeiros</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-tags"></i> Especialidades</a></li>
+            <li class="nav-item"><a class="nav-link" href="/teste"><i class="bi bi-tags"></i> Especialidades</a></li>
             <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people"></i> Clientes</a></li>
             <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-clock-history"></i> Histórico</a></li>
             <li class="nav-item mt-4"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Configurações</a></li>
