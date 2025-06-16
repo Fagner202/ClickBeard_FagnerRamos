@@ -63,6 +63,29 @@ switch ($uri) {
         renderView('teste', ['title' => 'Home'], false);
         break;
 
+    case '/barbeiros':
+        // dd('Rota barbeiros');
+        require_once __DIR__ . '/../middleware/auth.php';
+        require_once __DIR__ . '/../controllers/barbeirosController.php';
+        $usuario = autenticarUsuario();
+
+        require_once __DIR__ . '/../controllers/barbeirosController.php';
+        if ($method === 'POST') {
+            dd('Criando barbeiro...');
+            criarBarbeiro();
+        } else {
+            dd('Listando barbeiros...');
+            listarBarbeiros();
+        }
+        break;
+
+    case '/barbeiros/delete':
+        require_once __DIR__ . '/../controllers/barbeiroController.php';
+        if ($method === 'GET' && isset($_GET['id'])) {
+            deletarBarbeiro($_GET['id']);
+        }
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(['erro' => 'Rota não encontrada']);

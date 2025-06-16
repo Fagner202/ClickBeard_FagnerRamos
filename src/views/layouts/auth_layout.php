@@ -33,7 +33,13 @@ $usuario = $_SESSION['nome'] ?? null;
                 </a>
             </li>
             <li class="nav-item"><a class="nav-link" href="/teste"><i class="bi bi-calendar-plus"></i> Novo Agendamento</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-scissors"></i> Barbeiros</a></li>
+
+            <li class="nav-item">
+                <a class="nav-link <?= ($currentUrl === '/barbeiros') ? 'active' : '' ?>" href="/barbeiros">
+                    <i class="bi bi-scissors"></i> Barbeiros
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/teste') ? 'active' : '' ?>" href="/teste">
                     <i class="bi bi-calendar-plus"></i> Novo Agendamento

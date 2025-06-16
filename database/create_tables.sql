@@ -7,10 +7,10 @@ CREATE TABLE clientes (
 );
 
 CREATE TABLE barbeiros (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
+    cliente_id INT PRIMARY KEY,
     idade INT NOT NULL,
-    data_contratacao DATE NOT NULL
+    data_contratacao DATE NOT NULL,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE
 );
 
 CREATE TABLE especialidades (
@@ -22,9 +22,10 @@ CREATE TABLE barbeiro_especialidade (
     barbeiro_id INT,
     especialidade_id INT,
     PRIMARY KEY (barbeiro_id, especialidade_id),
-    FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(id),
+    FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(cliente_id),
     FOREIGN KEY (especialidade_id) REFERENCES especialidades(id)
 );
+
 
 CREATE TABLE agendamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,6 +36,6 @@ CREATE TABLE agendamentos (
     cancelado BOOLEAN DEFAULT FALSE,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
-    FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(id),
+    FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(cliente_id),
     FOREIGN KEY (especialidade_id) REFERENCES especialidades(id)
 );
