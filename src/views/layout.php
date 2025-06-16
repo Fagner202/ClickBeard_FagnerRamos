@@ -5,7 +5,14 @@
     <title><?= $title ?? 'ClickBeard' ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+
+    <!-- CSS Principal -->
     <link rel="stylesheet" href="/css/styles.css">
+
+    <!-- CSS específico da página -->
+    <?php if (!empty($cssPage)): ?>
+        <link rel="stylesheet" href="/css/<?= $cssPage ?>.css">
+    <?php endif; ?>
 </head>
 <body class="d-flex">
     <!-- Menu Vertical -->

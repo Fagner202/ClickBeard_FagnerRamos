@@ -1,0 +1,59 @@
+/* AGENDAMENTOS.CSS */
+.card-agendamento {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    margin-bottom: 20px;
+    border: none;
+}
+
+.card-agendamento:hover {
+    transform: translateY(-5px);
+}
+
+.card-header-agendamento {
+    background-color: #7E57C2;
+    color: white;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 12px 15px;
+}
+
+.badge-estado {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: normal;
+}
+
+.badge-confirmado {
+    background-color: #2E7D32;
+    color: white;
+}
+
+.badge-pendente {
+    background-color: #FFC107;
+    color: #37474F;
+}
+
+.badge-cancelado {
+    background-color: #D32F2F;
+    color: white;
+}
+
+.btn-cancelar {
+    background-color: #D32F2F;
+    border-color: #D32F2F;
+    color: white;
+}
+
+.btn-cancelar:hover {
+    background-color: #B71C1C;
+    border-color: #B71C1C;
+}
+
+.filtros-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
