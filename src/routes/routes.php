@@ -41,7 +41,6 @@ switch ($uri) {
 
     case '/login':
         if ($method === 'POST') {
-            dd('Login POST request received');
             require __DIR__ . '/../controllers/login.php';
         } else {
             renderView('login', ['title' => 'Login'],  false);

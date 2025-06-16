@@ -43,7 +43,9 @@ ob_start(); ?>
             : (result.erro || 'Erro no cadastro');
 
         if (response.ok) {
-            localStorage.setItem('token', result.token);
+            // Redireciona para a página de login após o cadastro
+            window.location.href = '/login';
+            // localStorage.setItem('token', result.token);
         }
     });
 </script>
