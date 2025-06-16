@@ -51,6 +51,10 @@ switch ($uri) {
         require __DIR__ . '/../views/agendamento.php';
         break;
 
+    case '/logout':
+        require_once __DIR__ . '/../controllers/logout.php';
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(['erro' => 'Rota não encontrada']);
