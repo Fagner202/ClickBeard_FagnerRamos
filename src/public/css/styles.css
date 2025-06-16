@@ -1,0 +1,65 @@
+:root {
+    --roxo-principal: #7E57C2;
+    --roxo-hover: #9C27B0;
+    --dourado: #FFC107;
+    --azul-profundo: #1565C0;
+    --cinza-escuro: #37474F;
+    --cinza-claro: #ECEFF1;
+}
+
+.sidebar {
+    background-color: var(--cinza-escuro);
+    width: 250px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link {
+    color: white;
+    padding: 1rem;
+    border-left: 4px solid transparent;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: rgba(255,255,255,0.1);
+    border-left-color: var(--dourado);
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+    color: var(--dourado);
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    background-color: var(--roxo-principal);
+    border-bottom: 2px solid var(--dourado);
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: var(--cinza-claro);
+    min-height: 100vh;
+}
+
+.btn-primary {
+    background-color: var(--roxo-principal);
+    border-color: var(--roxo-principal);
+}
+
+.btn-primary:hover {
+    background-color: var(--roxo-hover);
+    border-color: var(--roxo-hover);
+}
+
+.btn-outline-primary {
+    color: var(--roxo-principal);
+    border-color: var(--roxo-principal);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--roxo-principal);
+    color: white;
+}
