@@ -33,42 +33,6 @@ function listarBarbeiros()
     ], false);
 }
 
-function criarBarbeiro()
-{
-    global $pdo;
-
-    $nome = $_POST['nome'] ?? '';
-    $idade = $_POST['idade'] ?? '';
-    $data = $_POST['data_contratacao'] ?? '';
-    $especialidades = $_POST['especialidades'] ?? [];
-
-    if (empty($nome) || empty($idade) || empty($data)) {
-        http_response_code(400);
-        echo 'Dados obrigatórios não enviados.';
-        exit;
-    }
-
-    try {
-        $pdo->beginTransaction();
-
-        $stmt = $pdo->prepare("INSERT INTO barbeiros (nome, idade, data_contratacao) VALUES (?, ?, ?)");
-        $stmt->execute([$nome, $idade, $data]);
-        $barbeiroId = $pdo->lastInsertId();
-
-        $stmtEsp = $pdo->prepare("INSERT INTO barbeiro_especialidade (barbeiro_id, especialidade_id) VALUES (?, ?)");
-        foreach ($especialidades as $espId) {
-            $stmtEsp->execute([$barbeiroId, $espId]);
-        }
-
-        $pdo->commit();
-        header('Location: /barbeiros');
-        exit;
-    } catch (Exception $e) {
-        $pdo->rollBack();
-        echo "Erro: " . $e->getMessage();
-    }
-}
-
 function deletarBarbeiro($id)
 {
     global $pdo;
