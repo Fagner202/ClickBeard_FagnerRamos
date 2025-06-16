@@ -38,4 +38,45 @@ class Barbeiro
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function verificarSeEhBarbeiro($cliente_id)
+    {
+
+        $stmt = $this->pdo->prepare("SELECT 
+                                        * 
+                                    FROM 
+                                        barbeiros
+                                    WHERE 
+                                        cliente_id = ?");
+        $stmt->execute([$cliente_id]);
+        return $stmt->fetch();
+    }
+
+    public function criarBarbeiro($cliente_id, $idade, $data_contratacao)
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO barbeiros (cliente_id, idade, data_contratacao, status) VALUES (?, ?, ?, 'ativo')");
+        return $stmt->execute([$cliente_id, $idade, $data_contratacao]);
+    }
+
+    // Ativar um barbeiro inativo
+    public function ativarBarbeiro($cliente_id)
+    {
+        $stmt = $this->pdo->prepare("UPDATE barbeiros SET status = 'ativo' WHERE cliente_id = ? AND status = 'inativo'");
+        return $stmt->execute([$cliente_id]);
+    }
+
+    // Inativar um barbeiro ativo
+    public function inativarBarbeiro($cliente_id)
+    {
+        $stmt = $this->pdo->prepare("UPDATE barbeiros SET status = 'inativo' WHERE cliente_id = ? AND status = 'ativo'");
+        return $stmt->execute([$cliente_id]);
+    }
+
+    public function retornaBarbeiro($cliente_id)
+    {
+        $sql = "SELECT * FROM barbeiros b WHERE b.cliente_id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$cliente_id]);
+        return $stmt->fetch();
+    }
 }

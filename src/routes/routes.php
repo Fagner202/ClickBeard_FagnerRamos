@@ -79,17 +79,16 @@ switch ($uri) {
     case '/barbeiros/criar':
         require_once __DIR__ . '/../middleware/auth.php';
         if ($method === 'POST') {
-            $barbeiroController->criarBarbeiroComCliente();
+            $barbeiroController->create();
         } else {
             http_response_code(405);
             echo 'Método não permitido.';
         }
         break;
 
-    case '/barbeiros/deletar':
-        if ($method === 'GET' && isset($_GET['id'])) {
-            $barbeiroController->deletarBarbeiro($_GET['id']);
-        }
+    case '/barbeiros/inativar':
+        $controller = new BarbeiroController($pdo);
+        $controller->inativar();
         break;
 
     default:

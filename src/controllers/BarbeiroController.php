@@ -14,48 +14,20 @@ class BarbeiroController
 
     function index()
     {
+        $usuario = autenticarUsuario();
+        // dd($usuario);
         // dd('Na controller listarBarbeiros');
-        $barbeiros = $this->barbeiroModel->listarAtivos();
+        $barbeiro = $this->barbeiroModel->retornaBarbeiro($usuario['id']);
+        // dd($barbeiro);
         
         renderView('barbeiros/index', [
             'title' => "Barbeiros - ClickBeard",
-            'barbeiros' => $barbeiros
+            'barbeiro' => $barbeiro
         ], false);
     }
 
-    function deletarBarbeiro($id)
+    public function create()
     {
-        global $pdo;
-
-        if (!$id) {
-            http_response_code(400);
-            echo 'ID inválido';
-            exit;
-        }
-
-        try {
-            $pdo->beginTransaction();
-
-            // Deleta primeiro as especialidades (não tem CASCADE)
-            $stmt = $pdo->prepare("DELETE FROM barbeiro_especialidade WHERE barbeiro_id = ?");
-            $stmt->execute([$id]);
-
-            // Deleta o cliente (o CASCADE vai deletar automaticamente o barbeiro)
-            $stmt = $pdo->prepare("DELETE FROM clientes WHERE id = ?");
-            $stmt->execute([$id]);
-
-            $pdo->commit();
-            header('Location: /barbeiros');
-            exit;
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            echo "Erro ao deletar: " . $e->getMessage();
-        }
-    }
-
-    function criarBarbeiroComCliente()
-    {
-        global $pdo;
         session_start();
 
         $cliente_id = $_POST['cliente_id'] ?? null;
@@ -63,22 +35,51 @@ class BarbeiroController
         $data_contratacao = $_POST['data_contratacao'] ?? null;
 
         if (!$cliente_id || !$idade || !$data_contratacao) {
-            echo "Dados incompletos.";
-            return;
+            $_SESSION['erro'] = "Dados incompletos.";
+            header('Location: /barbeiros');
+            exit;
         }
 
-        // dd($cliente_id);
+        $barbeiroInativo = $this->barbeiroModel->verificarSeEhBarbeiro($cliente_id);
 
-        // Verificar se já é barbeiro
-        $stmt = $pdo->prepare("SELECT * FROM barbeiros WHERE cliente_id = ?");
-        $stmt->execute([$cliente_id]);
-        if ($stmt->fetch()) {
-            echo "Você já é um barbeiro!";
-            return;
+        if ($barbeiroInativo) {
+            // Caso 3: Já foi barbeiro, reativar
+            if ($this->barbeiroModel->ativarBarbeiro($cliente_id)) {
+                $_SESSION['sucesso'] = "Seu perfil de barbeiro foi reativado!";
+            } else {
+                $_SESSION['erro'] = "Erro ao reativar perfil de barbeiro.";
+            }
+            header('Location: /barbeiros');
+            exit;
         }
 
-        $stmt = $pdo->prepare("INSERT INTO barbeiros (cliente_id, idade, data_contratacao) VALUES (?, ?, ?)");
-        $stmt->execute([$cliente_id, $idade, $data_contratacao]);
+        // Caso 1: Nunca foi barbeiro
+        if ($this->barbeiroModel->criarBarbeiro($cliente_id, $idade, $data_contratacao)) {
+            $_SESSION['sucesso'] = "Barbeiro cadastrado com sucesso!";
+        } else {
+            $_SESSION['erro'] = "Erro ao cadastrar barbeiro.";
+        }
+
+        header('Location: /barbeiros');
+        exit;
+    }
+
+    public function inativar()
+    {
+        session_start();
+        $cliente_id = $_POST['cliente_id'] ?? null;
+
+        if (!$cliente_id) {
+            $_SESSION['erro'] = "Cliente inválido.";
+            header('Location: /barbeiros');
+            exit;
+        }
+
+        if ($this->barbeiroModel->inativarBarbeiro($cliente_id)) {
+            $_SESSION['sucesso'] = "Você não é mais um barbeiro.";
+        } else {
+            $_SESSION['erro'] = "Erro ao inativar barbeiro.";
+        }
 
         header('Location: /barbeiros');
         exit;
