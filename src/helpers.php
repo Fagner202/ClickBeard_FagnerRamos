@@ -7,6 +7,7 @@ function renderView(string $view, array $data = [], bool $auth = true): void
 
     // Caminho absoluto para a view
     $viewPath = __DIR__ . "/views/{$view}.php";
+    // dd($viewPath);
 
     // Verifica se o arquivo da view existe
     if (!file_exists($viewPath)) {

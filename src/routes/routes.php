@@ -74,7 +74,7 @@ switch ($uri) {
             dd('Criando barbeiro...');
             criarBarbeiro();
         } else {
-            dd('Listando barbeiros...');
+            // dd('Listando barbeiros...');
             listarBarbeiros();
         }
         break;

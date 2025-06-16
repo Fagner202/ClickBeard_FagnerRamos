@@ -5,21 +5,32 @@ function listarBarbeiros()
 {
     global $pdo;
 
-    $sql = "SELECT b.id, b.nome, b.idade, b.data_contratacao, GROUP_CONCAT(e.nome SEPARATOR ', ') AS especialidades
-            FROM barbeiros b
-            LEFT JOIN barbeiro_especialidade be ON b.id = be.barbeiro_id
-            LEFT JOIN especialidades e ON be.especialidade_id = e.id
-            GROUP BY b.id";
+    $sql = "SELECT 
+                c.id,
+                c.nome,
+                c.email,
+                b.idade,
+                b.data_contratacao,
+                GROUP_CONCAT(e.nome SEPARATOR ', ') AS especialidades
+            FROM 
+                clientes c
+            INNER JOIN 
+                barbeiros b ON c.id = b.cliente_id
+            LEFT JOIN 
+                barbeiro_especialidade be ON b.cliente_id = be.barbeiro_id
+            LEFT JOIN 
+                especialidades e ON be.especialidade_id = e.id
+            GROUP BY 
+                c.id, c.nome, c.email, b.idade, b.data_contratacao";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $barbeiros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $title = "Barbeiros - ClickBeard";
-    ob_start();
-    require __DIR__ . '/../views/barbeiros/index.php';
-    $content = ob_get_clean();
-    require __DIR__ . '/../views/layout.php';
+    renderView('barbeiros/index', [
+        'title' => "Barbeiros - ClickBeard",
+        'barbeiros' => $barbeiros
+    ], false);
 }
 
 function criarBarbeiro()
