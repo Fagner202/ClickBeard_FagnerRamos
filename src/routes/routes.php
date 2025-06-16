@@ -50,11 +50,15 @@ switch ($uri) {
     case '/agendamentos':
         require_once __DIR__ . '/../middleware/auth.php';
         $usuario = autenticarUsuario();
-        require __DIR__ . '/../views/agendamento.php';
+        renderView('agendamento', ['title' => 'Agendamentos', 'usuario' => $usuario], false);
         break;
 
     case '/logout':
         require_once __DIR__ . '/../controllers/logout.php';
+        break;
+
+    case '/':
+        renderView('home', ['title' => 'Home'], false);
         break;
 
     default:
