@@ -1,6 +1,7 @@
 <?php
 // src/routes/routes.php
 require_once __DIR__ . '/../utils/utils.php';
+require_once __DIR__ . '/../helpers.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -33,13 +34,14 @@ switch ($uri) {
         if ($method === 'POST') {
             require __DIR__ . '/../controllers/register.php';
         } else {
-            require __DIR__ . '/../views/cadastro.php';
+            // require __DIR__ . '/../views/cadastro.php';
+            renderView('cadastro', ['title' => 'Cadastro'], false);
         }
         break;
 
     case '/login':
-        require_once __DIR__ . '/../helpers.php';
         if ($method === 'POST') {
+            dd('Login POST request received');
             require __DIR__ . '/../controllers/login.php';
         } else {
             renderView('login', ['title' => 'Login'],  false);

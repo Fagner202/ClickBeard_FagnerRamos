@@ -30,7 +30,7 @@ ob_start(); ?>
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
 
-        const response = await fetch('/cadastro', {
+        const response = await fetch('/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -50,4 +50,4 @@ ob_start(); ?>
 <?php
 
 $content = ob_get_clean();
-require __DIR__ . '/layout.php';
+require __DIR__ . '/layouts/guest_layout.php';
