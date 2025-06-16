@@ -96,3 +96,34 @@ function deletarBarbeiro($id)
         echo "Erro ao deletar: " . $e->getMessage();
     }
 }
+
+function criarBarbeiroComCliente()
+{
+    global $pdo;
+    session_start();
+
+    $cliente_id = $_POST['cliente_id'] ?? null;
+    $idade = $_POST['idade'] ?? null;
+    $data_contratacao = $_POST['data_contratacao'] ?? null;
+
+    if (!$cliente_id || !$idade || !$data_contratacao) {
+        echo "Dados incompletos.";
+        return;
+    }
+
+    // dd($cliente_id);
+
+    // Verificar se já é barbeiro
+    $stmt = $pdo->prepare("SELECT * FROM barbeiros WHERE cliente_id = ?");
+    $stmt->execute([$cliente_id]);
+    if ($stmt->fetch()) {
+        echo "Você já é um barbeiro!";
+        return;
+    }
+
+    $stmt = $pdo->prepare("INSERT INTO barbeiros (cliente_id, idade, data_contratacao) VALUES (?, ?, ?)");
+    $stmt->execute([$cliente_id, $idade, $data_contratacao]);
+
+    header('Location: /barbeiros');
+    exit;
+}

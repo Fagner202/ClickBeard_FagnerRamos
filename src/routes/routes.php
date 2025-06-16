@@ -79,6 +79,18 @@ switch ($uri) {
         }
         break;
 
+    case '/barbeiros/criar':
+        require_once __DIR__ . '/../middleware/auth.php';
+        require_once __DIR__ . '/../controllers/barbeirosController.php';
+        if ($method === 'POST') {
+            // dd('Criando barbeiro com cliente...');
+            criarBarbeiroComCliente();
+        } else {
+            http_response_code(405);
+            echo 'Método não permitido.';
+        }
+        break;
+
     case '/barbeiros/delete':
         require_once __DIR__ . '/../controllers/barbeiroController.php';
         if ($method === 'GET' && isset($_GET['id'])) {

@@ -12,7 +12,12 @@ ob_start();
 <h1>Lista de Barbeiros</h1>
 <p>Usuário autenticado: <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></p>
 
-<a href="/barbeiros/novo">Cadastrar Novo Barbeiro</a>
+<form action="/barbeiros/criar" method="POST">
+    <input type="hidden" name="cliente_id" value="<?= $usuario['id'] ?>">
+    <input type="hidden" name="idade" value="30"> <!-- Altere para capturar de forma dinâmica depois -->
+    <input type="hidden" name="data_contratacao" value="<?= date('Y-m-d') ?>">
+    <button type="submit">Deseja se tornar um barbeiro?</button>
+</form>
 
 <?php if (!empty($barbeiros)) : ?>
     <table border="1" cellpadding="5" cellspacing="0">
