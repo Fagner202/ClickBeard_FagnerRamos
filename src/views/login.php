@@ -43,4 +43,4 @@ ob_start(); ?>
 <?php endif; ?>
 <?php
 $content = ob_get_clean();
-require __DIR__ . '/layout.php';
+require __DIR__ . '/layouts/guest_layout.php';

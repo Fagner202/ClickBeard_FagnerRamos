@@ -38,10 +38,11 @@ switch ($uri) {
         break;
 
     case '/login':
+        require_once __DIR__ . '/../helpers.php';
         if ($method === 'POST') {
             require __DIR__ . '/../controllers/login.php';
         } else {
-            require __DIR__ . '/../views/login.php';
+            renderView('login', ['title' => 'Login'],  false);
         }
         break;
 
