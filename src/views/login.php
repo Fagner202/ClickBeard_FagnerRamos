@@ -3,16 +3,33 @@
 
 $title = 'Login - ClickBeard';
 ob_start(); ?>
-<h2 class="mb-4 text-center">Login</h2>
-<form method="POST" action="/login" class="bg-white p-4 rounded shadow-sm">
-    <div class="mb-3">
-        <input type="email" name="email" class="form-control" placeholder="E-mail" required>
+<div class="container min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold mb-1">ClickBeard</h2>
+            <p class="text-muted mb-0">Sistema de Agendamento</p>
+        </div>
+        <h4 class="mb-3 text-center">Login</h4>
+        <?php if (!empty($_GET['erro'])): ?>
+            <div class="alert alert-danger text-center py-2"><?= htmlspecialchars($_GET['erro']) ?></div>
+        <?php endif; ?>
+        <form method="POST" action="/login" autocomplete="off">
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Digite seu e-mail" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" name="senha" id="senha" class="form-control" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-2">Entrar</button>
+        </form>
+        <div class="text-center mt-2">
+            <span class="text-muted">Não tem conta?</span>
+            <a href="/register" class="btn btn-outline-secondary btn-sm ms-2">Cadastre-se</a>
+        </div>
     </div>
-    <div class="mb-3">
-        <input type="password" name="senha" class="form-control" placeholder="Senha" required>
-    </div>
-    <button type="submit" class="btn btn-success w-100">Entrar</button>
-</form>
+</div>
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
