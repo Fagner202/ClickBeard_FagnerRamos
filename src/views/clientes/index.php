@@ -22,6 +22,9 @@ ob_start();
         <ul>
             <?php foreach ($especialidades as $especialidade): ?>
                 <li><?= htmlspecialchars($especialidade['nome']) ?></li>
+                <button type="button" onclick="vincularEspecialidade(<?= $especialidade['id'] ?>)">
+                    Vincular
+                </button>
             <?php endforeach; ?>
         </ul>
     <?php else: ?>
@@ -38,6 +41,21 @@ ob_start();
 <?php endif; ?>
 
 <p><a href="/agendamentos">Voltar ao Dashboard</a></p>
+
+<script>
+function vincularEspecialidade(especialidadeId) {
+    console.log("Especialidade selecionada:", especialidadeId);
+    
+    // Aqui você pode depois fazer algo como:
+    // - enviar via fetch/AJAX
+    // - montar um formulário oculto e submeter
+    // - abrir um modal, etc.
+    
+    // Exemplo simples de exibição:
+    alert("Especialidade com ID " + especialidadeId + " selecionada para vincular.");
+}
+</script>
+
 
 <?php
 $content = ob_get_clean();
