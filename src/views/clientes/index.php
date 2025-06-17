@@ -96,15 +96,18 @@ ob_start();
                 } else {
                     alert("Erro ao vincular: " + data.mensagem);
                 }
+
+                location.reload();
             });
         } else {
-            fetch('/ajax/desvincular', {
+            fetch('/ajax/desvincular-especialidade', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    especialidade_id: especialidadeId
+                    especialidade_id: especialidadeId,
+                    barbeiro_id: barbeiroId
                 })
             })
             .then(response => response.json())
@@ -116,6 +119,8 @@ ob_start();
                 } else {
                     alert("Erro ao desvincular: " + data.mensagem);
                 }
+
+                location.reload();
             });
         }
     }

@@ -28,7 +28,7 @@ class AjaxController
             echo json_encode(['erro' => 'Dados inválidos']);
             exit;
         }
-        
+
         $sucesso = $this->barbeiroEspecialidadeModel->vincular($barbeiro_id, $especialidade_id, $valor);
 
         echo json_encode([
@@ -41,6 +41,8 @@ class AjaxController
     public function desvincularEspecialidade()
     {
         $dados = json_decode(file_get_contents('php://input'), true);
+
+        // dd($dados);
 
         $barbeiro_id = $dados['barbeiro_id'] ?? null;
         $especialidade_id = $dados['especialidade_id'] ?? null;
