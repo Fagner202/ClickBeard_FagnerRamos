@@ -17,16 +17,18 @@ ob_start();
         <button type="submit">Deixar de ser barbeiro</button>
     </form>
 
-    <h2>Suas especialidades:</h2>
+    <h2>Especialidades Disponíveis:</h2>
     <?php if (!empty($especialidades)): ?>
         <ul id="lista-especialidades">
-            <?php foreach ($especialidades as $especialidade): ?>
+            <?php foreach ($especialidades as $especialidade): 
+                $vinculado = in_array($especialidade['id'], $especialidadesVinculadas ?? []);
+            ?>
                 <li id="especialidade-<?= $especialidade['id'] ?>">
                     <?= htmlspecialchars($especialidade['nome']) ?>
                     <button 
                         onclick="toggleEspecialidade(this, <?= $especialidade['id'] ?>)" 
-                        data-vinculado="false">
-                        Vincular
+                        data-vinculado="<?= $vinculado ? 'true' : 'false' ?>">
+                        <?= $vinculado ? 'Desvincular' : 'Vincular' ?>
                     </button>
                 </li>
             <?php endforeach; ?>
