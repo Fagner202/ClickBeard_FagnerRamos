@@ -22,12 +22,19 @@ class BarbeiroEspecialidade
         return $stmt->execute([$barbeiro_id, $especialidade_id]);
     }
 
-        public function getEspecialidadesVinculadas($barbeiro_id)
+    public function getEspecialidadesVinculadas($barbeiro_id)
     {
-        $stmt = $this->pdo->prepare("SELECT especialidade_id FROM barbeiro_especialidade WHERE barbeiro_id = ?");
+        $stmt = $this->pdo->prepare("SELECT especialidade_id, valor FROM barbeiro_especialidade WHERE barbeiro_id = ?");
         $stmt->execute([$barbeiro_id]);
-        $result = $stmt->fetchAll(PDO::FETCH_COLUMN); // Agora retorna um array com todos os IDs
-        // dd($result); // Use isso só para testar
-        return $result;
+
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $valores = [];
+        foreach ($resultados as $linha) {
+            $valores[$linha['especialidade_id']] = $linha['valor'];
+        }
+
+        return $valores;
     }
+
 }

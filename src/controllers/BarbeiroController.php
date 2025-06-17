@@ -23,24 +23,24 @@ class BarbeiroController
         $usuario = autenticarUsuario();
         $barbeiro = $this->barbeiroModel->retornaBarbeiro($usuario['id']);
         $especialidades = $this->especialidadeModel->getAllEspecialidade();
-        // dd($especialidades);
-        
+
         $especialidadesVinculadas = [];
+        $valores = [];
 
         if ($barbeiro && $barbeiro['status'] === 'ativo') {
-            // dd('kdkddk');
             $especialidadesVinculadas = $this->barbeiroEspecialidadeModel->getEspecialidadesVinculadas($barbeiro['cliente_id']);
+            $valores = $especialidadesVinculadas; // Já vem no formato [id => valor]
         }
-        // dd($especialidadesVinculadas);
-        // dd($barbeiro['cliente_id']);
-        
+
         renderView('clientes/index', [
             'title' => "Barbeiros - ClickBeard",
             'barbeiro' => $barbeiro,
             'especialidades' => $especialidades,
-            'especialidadesVinculadas' => $especialidadesVinculadas
+            'especialidadesVinculadas' => array_keys($especialidadesVinculadas), // Apenas os IDs
+            'valores' => $valores // Associativo com valores
         ], false);
     }
+
 
     public function create()
     {

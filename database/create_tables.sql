@@ -21,10 +21,12 @@ CREATE TABLE especialidades (
 CREATE TABLE barbeiro_especialidade (
     barbeiro_id INT,
     especialidade_id INT,
+    valor DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     PRIMARY KEY (barbeiro_id, especialidade_id),
     FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(cliente_id),
     FOREIGN KEY (especialidade_id) REFERENCES especialidades(id)
 );
+
 
 
 CREATE TABLE agendamentos (

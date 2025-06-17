@@ -26,14 +26,20 @@ ob_start();
                 <?php foreach ($especialidades as $especialidade): 
                     $vinculado = in_array($especialidade['id'], $especialidadesVinculadas ?? []);
                 ?>
-                    <li class="list-group-item d-flex justify-content-between align-items-center" id="especialidade-<?= $especialidade['id'] ?>">
-                        <?= htmlspecialchars($especialidade['nome']) ?>
+                    <li id="especialidade-<?= $especialidade['id'] ?>">
+                        <?= htmlspecialchars($especialidade['nome']) ?> 
+                        (R$ <span id="valor-<?= $especialidade['id'] ?>"><?= $valores[$especialidade['id']] ?? '0.00' ?></span>)
+                        
                         <button 
-                            class="btn btn-sm <?= $vinculado ? 'btn-outline-danger' : 'btn-outline-primary' ?>"
                             onclick="toggleEspecialidade(this, <?= $especialidade['id'] ?>)" 
-                            data-vinculado="<?= $vinculado ? 'true' : 'false' ?>">
+                            data-vinculado="<?= $vinculado ? 'true' : 'false' ?>"
+                            data-valor="<?= $valores[$especialidade['id']] ?? '' ?>">
                             <?= $vinculado ? 'Desvincular' : 'Vincular' ?>
                         </button>
+
+                        <?php if ($vinculado): ?>
+                            <button onclick="editarValor(<?= $especialidade['id'] ?>)">Editar Valor</button>
+                        <?php endif; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -59,34 +65,60 @@ ob_start();
 <script>
     const barbeiroId = <?= $barbeiro['cliente_id'] ?>;
 
-    function toggleEspecialidade(botao, especialidadeId) {
-        const vinculado = botao.dataset.vinculado === 'true';
+    function toggleEspecialidade(button, especialidadeId) {
+        const vinculado = button.getAttribute('data-vinculado') === 'true';
 
-        const url = vinculado 
-            ? '/ajax/desvincular-especialidade' 
-            : '/ajax/vincular-especialidade';
+        if (!vinculado) {
+            const valor = prompt("Digite o valor para essa especialidade (em R$):", "50.00");
 
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                barbeiro_id: barbeiroId,
-                especialidade_id: especialidadeId
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.mensagem);
-
-            if (data.sucesso) {
-                botao.textContent = vinculado ? 'Vincular' : 'Desvincular';
-                botao.dataset.vinculado = vinculado ? 'false' : 'true';
+            if (valor === null || valor.trim() === '') {
+                alert("Vínculo cancelado. Valor não informado.");
+                return;
             }
-        })
-        .catch(error => {
-            console.error('Erro na requisição:', error);
-        });
+
+            fetch('/ajax/vincular', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    especialidade_id: especialidadeId,
+                    valor: valor
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.sucesso) {
+                    button.textContent = "Desvincular";
+                    button.setAttribute('data-vinculado', 'true');
+                    button.setAttribute('data-valor', valor);
+                } else {
+                    alert("Erro ao vincular: " + data.mensagem);
+                }
+            });
+        } else {
+            fetch('/ajax/desvincular', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    especialidade_id: especialidadeId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.sucesso) {
+                    button.textContent = "Vincular";
+                    button.setAttribute('data-vinculado', 'false');
+                    button.removeAttribute('data-valor');
+                } else {
+                    alert("Erro ao desvincular: " + data.mensagem);
+                }
+            });
+        }
     }
+
 </script>
 
 
