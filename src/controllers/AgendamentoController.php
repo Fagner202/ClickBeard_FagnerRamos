@@ -23,6 +23,11 @@ class AgendamentoController {
 
     public function index() {
         $barbeiros = $this->barbeiroModel->getAll();
-        dd($barbeiros);
+        // dd($barbeiros);
+
+        renderView('agendamento/index', [
+            'title' => "Agendamentos",
+            'barbeiros' => $barbeiros
+        ], false);
     }
 }
