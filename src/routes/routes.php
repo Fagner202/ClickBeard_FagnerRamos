@@ -96,6 +96,11 @@ switch ($uri) {
     case '/ajax/vincular-especialidade':
         $ajaxController->vincularEspecialidade();
         exit;
+        break;
+    case '/ajax/desvincular-especialidade':
+        $ajaxController->desvincularEspecialidade();
+        exit;
+        break;
 
     default:
         http_response_code(404);

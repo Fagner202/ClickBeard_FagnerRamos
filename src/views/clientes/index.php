@@ -19,12 +19,16 @@ ob_start();
 
     <h2>Suas especialidades:</h2>
     <?php if (!empty($especialidades)): ?>
-        <ul>
+        <ul id="lista-especialidades">
             <?php foreach ($especialidades as $especialidade): ?>
-                <li><?= htmlspecialchars($especialidade['nome']) ?></li>
-                <button type="button" onclick="vincularEspecialidade(<?= $especialidade['id'] ?>)">
-                    Vincular
-                </button>
+                <li id="especialidade-<?= $especialidade['id'] ?>">
+                    <?= htmlspecialchars($especialidade['nome']) ?>
+                    <button 
+                        onclick="toggleEspecialidade(this, <?= $especialidade['id'] ?>)" 
+                        data-vinculado="false">
+                        Vincular
+                    </button>
+                </li>
             <?php endforeach; ?>
         </ul>
     <?php else: ?>
@@ -43,27 +47,36 @@ ob_start();
 <p><a href="/agendamentos">Voltar ao Dashboard</a></p>
 
 <script>
-function vincularEspecialidade(especialidadeId) {
     const barbeiroId = <?= $barbeiro['cliente_id'] ?>;
 
-    fetch('/ajax/vincular-especialidade', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            barbeiro_id: barbeiroId,
-            especialidade_id: especialidadeId
+    function toggleEspecialidade(botao, especialidadeId) {
+        const vinculado = botao.dataset.vinculado === 'true';
+
+        const url = vinculado 
+            ? '/ajax/desvincular-especialidade' 
+            : '/ajax/vincular-especialidade';
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                barbeiro_id: barbeiroId,
+                especialidade_id: especialidadeId
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.mensagem);
-    })
-    .catch(error => {
-        console.error('Erro na requisição AJAX:', error);
-    });
-}
+        .then(response => response.json())
+        .then(data => {
+            alert(data.mensagem);
+
+            if (data.sucesso) {
+                botao.textContent = vinculado ? 'Vincular' : 'Desvincular';
+                botao.dataset.vinculado = vinculado ? 'false' : 'true';
+            }
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+        });
+    }
 </script>
 
 

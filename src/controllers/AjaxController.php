@@ -34,4 +34,26 @@ class AjaxController
             'mensagem' => $sucesso ? 'Vínculo criado com sucesso.' : 'Erro ao criar vínculo.'
         ]);
     }
+
+    public function desvincularEspecialidade()
+    {
+        $dados = json_decode(file_get_contents('php://input'), true);
+
+        $barbeiro_id = $dados['barbeiro_id'] ?? null;
+        $especialidade_id = $dados['especialidade_id'] ?? null;
+
+        if (!$barbeiro_id || !$especialidade_id) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Dados inválidos']);
+            exit;
+        }
+
+        $sucesso = $this->barbeiroEspecialidadeModel->desvincular($barbeiro_id, $especialidade_id);
+
+        echo json_encode([
+            'sucesso' => $sucesso,
+            'mensagem' => $sucesso ? 'Vínculo removido com sucesso.' : 'Erro ao remover vínculo.'
+        ]);
+    }
+
 }
