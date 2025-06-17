@@ -32,7 +32,12 @@ $usuario = $_SESSION['nome'] ?? null;
                     <i class="bi bi-house-door"></i> Dashboard
                 </a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/teste"><i class="bi bi-calendar-plus"></i> Agendamento</a></li>
+            
+            <li class="nav-item">
+                <a class="nav-link <?= ($currentUrl === '/agendamento') ? 'active' : '' ?>" href="/agendamento">
+                    <i class="bi bi-house-door"></i> Agendamento
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/usuario') ? 'active' : '' ?>" href="/usuario">
