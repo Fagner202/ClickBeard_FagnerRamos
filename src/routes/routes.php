@@ -3,12 +3,14 @@
 require_once __DIR__ . '/../utils/utils.php';
 require_once __DIR__ . '/../helpers.php';
 require_once __DIR__ . '/../controllers/BarbeiroController.php';
+require_once __DIR__ . '/../controllers/AjaxController.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
 $pdo = require_once __DIR__ . '/../config/database.php';
 $barbeiroController = new BarbeiroController($pdo);
+$ajaxController = new AjaxController($pdo);
 
 /**
  * Gerenciamento de rotas da aplicação.
@@ -90,6 +92,10 @@ switch ($uri) {
         $controller = new BarbeiroController($pdo);
         $controller->inativar();
         break;
+
+    case '/ajax/vincular-especialidade':
+        $ajaxController->vincularEspecialidade();
+        exit;
 
     default:
         http_response_code(404);

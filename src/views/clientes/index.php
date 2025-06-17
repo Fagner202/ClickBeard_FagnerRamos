@@ -44,15 +44,25 @@ ob_start();
 
 <script>
 function vincularEspecialidade(especialidadeId) {
-    console.log("Especialidade selecionada:", especialidadeId);
-    
-    // Aqui você pode depois fazer algo como:
-    // - enviar via fetch/AJAX
-    // - montar um formulário oculto e submeter
-    // - abrir um modal, etc.
-    
-    // Exemplo simples de exibição:
-    alert("Especialidade com ID " + especialidadeId + " selecionada para vincular.");
+    const barbeiroId = <?= $barbeiro['cliente_id'] ?>;
+
+    fetch('/ajax/vincular-especialidade', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            barbeiro_id: barbeiroId,
+            especialidade_id: especialidadeId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.mensagem);
+    })
+    .catch(error => {
+        console.error('Erro na requisição AJAX:', error);
+    });
 }
 </script>
 
