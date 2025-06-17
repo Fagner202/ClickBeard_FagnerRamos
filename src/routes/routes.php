@@ -1,114 +1,58 @@
 <?php
 // src/routes/routes.php
+
 require_once __DIR__ . '/../utils/utils.php';
 require_once __DIR__ . '/../helpers.php';
 require_once __DIR__ . '/../controllers/BarbeiroController.php';
 require_once __DIR__ . '/../controllers/AjaxController.php';
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$method = $_SERVER['REQUEST_METHOD'];
-
 $pdo = require_once __DIR__ . '/../config/database.php';
 $barbeiroController = new BarbeiroController($pdo);
 $ajaxController = new AjaxController($pdo);
 
-/**
- * Gerenciamento de rotas da aplicação.
- *
- * Este bloco de código utiliza uma estrutura switch para determinar qual ação executar
- * com base na URI da requisição ($uri) e no método HTTP ($method).
- *
- * - Para a rota '/register':
- *   - Se o método for POST, inclui o controlador responsável pelo registro de usuários.
- *   - Caso contrário, exibe a view de cadastro.
- *
- * - Para a rota '/login':
- *   - Se o método for POST, inclui o controlador responsável pelo login de usuários.
- *   - Caso contrário, exibe a view de login.
- *
- * - Para a rota '/agendamentos':
- *   - Inclui um middleware de autenticação para garantir que o usuário esteja autenticado.
- *   - Em seguida, exibe a view de agendamento.
- *
- * - Para qualquer outra rota:
- *   - Retorna um código de resposta HTTP 404 e uma mensagem de erro em JSON indicando que a rota não foi encontrada.
- *
- * Esta abordagem permite um roteamento simples e direto, facilitando o controle de acesso e a separação entre lógica de controle e apresentação.
- */
-switch ($uri) {
-    case '/register':
-        if ($method === 'POST') {
-            require __DIR__ . '/../controllers/register.php';
-        } else {
-            // require __DIR__ . '/../views/cadastro.php';
-            renderView('cadastro', ['title' => 'Cadastro'], false);
-        }
-        break;
+// Define rotas como: ['GET']['/caminho'] => callable
+$routes = [
+    'GET' => [
+        '/register' => fn() => renderView('cadastro', ['title' => 'Cadastro'], false),
+        '/login' => fn() => renderView('login', ['title' => 'Login'], false),
+        '/agendamentos' => function () {
+            require_once __DIR__ . '/../middleware/auth.php';
+            $usuario = autenticarUsuario();
+            renderView('agendamento', ['title' => 'Agendamentos', 'usuario' => $usuario], false);
+        },
+        '/logout' => fn() => require_once __DIR__ . '/../controllers/logout.php',
+        '/teste' => function () {
+            require_once __DIR__ . '/../middleware/auth.php';
+            $usuario = autenticarUsuario();
+            renderView('teste', ['title' => 'Home'], false);
+        },
+        '/usuario' => fn() => $barbeiroController->index(),
+    ],
 
-    case '/login':
-        if ($method === 'POST') {
-            require __DIR__ . '/../controllers/login.php';
-        } else {
-            renderView('login', ['title' => 'Login'],  false);
-        }
-        break;
+    'POST' => [
+        '/register' => fn() => require __DIR__ . '/../controllers/register.php',
+        '/login' => fn() => require __DIR__ . '/../controllers/login.php',
+        '/barbeiros/criar' => fn() => $barbeiroController->create(),
+        '/barbeiros/inativar' => fn() => $barbeiroController->inativar(),
+    ],
 
-    case '/agendamentos':
-        require_once __DIR__ . '/../middleware/auth.php';
-        $usuario = autenticarUsuario();
-        renderView('agendamento', ['title' => 'Agendamentos', 'usuario' => $usuario], false);
-        break;
+    'ANY' => [
+        '/ajax/vincular-especialidade' => fn() => $ajaxController->vincularEspecialidade(),
+        '/ajax/desvincular-especialidade' => fn() => $ajaxController->desvincularEspecialidade(),
+        '/ajax/atualizarValor' => fn() => $ajaxController->atualizarValor(),
+    ]
+];
 
-    case '/logout':
-        require_once __DIR__ . '/../controllers/logout.php';
-        break;
+// Obter a URI e método
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
 
-    case '/teste':
-        require_once __DIR__ . '/../middleware/auth.php';
-        $usuario = autenticarUsuario();
-        renderView('teste', ['title' => 'Home'], false);
-        break;
-
-    case '/usuario':
-        // dd('Rota barbeiros');
-        require_once __DIR__ . '/../middleware/auth.php';
-        $usuario = autenticarUsuario();
-
-        
-        $barbeiroController->index();
-        break;
-
-    case '/barbeiros/criar':
-        require_once __DIR__ . '/../middleware/auth.php';
-        if ($method === 'POST') {
-            $barbeiroController->create();
-        } else {
-            http_response_code(405);
-            echo 'Método não permitido.';
-        }
-        break;
-
-    case '/barbeiros/inativar':
-        $controller = new BarbeiroController($pdo);
-        $controller->inativar();
-        break;
-
-    case '/ajax/vincular-especialidade':
-        $ajaxController->vincularEspecialidade();
-        exit;
-        break;
-    case '/ajax/desvincular-especialidade':
-        $ajaxController->desvincularEspecialidade();
-        exit;
-        break;
-
-    case '/ajax/atualizarValor':
-        $ajaxController->atualizarValor();
-        exit;
-        break;
-
-    default:
-        http_response_code(404);
-        echo json_encode(['erro' => 'Rota não encontrada']);
-        break;
+// Executar a rota correspondente
+if (isset($routes[$method][$uri])) {
+    $routes[$method][$uri]();
+} elseif (isset($routes['ANY'][$uri])) {
+    $routes['ANY'][$uri]();
+} else {
+    http_response_code(404);
+    echo json_encode(['erro' => 'Rota não encontrada']);
 }

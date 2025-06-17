@@ -32,7 +32,7 @@ $usuario = $_SESSION['nome'] ?? null;
                     <i class="bi bi-house-door"></i> Dashboard
                 </a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/teste"><i class="bi bi-calendar-plus"></i> Novo Agendamento</a></li>
+            <li class="nav-item"><a class="nav-link" href="/teste"><i class="bi bi-calendar-plus"></i> Agendamento</a></li>
 
             <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/usuario') ? 'active' : '' ?>" href="/usuario">
@@ -42,7 +42,7 @@ $usuario = $_SESSION['nome'] ?? null;
 
             <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/teste') ? 'active' : '' ?>" href="/teste">
-                    <i class="bi bi-calendar-plus"></i> Novo Agendamento
+                    <i class="bi bi-calendar-plus"></i> Página Teste
                 </a>
             </li>
 
