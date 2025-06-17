@@ -102,6 +102,11 @@ switch ($uri) {
         exit;
         break;
 
+    case '/ajax/atualizarValor':
+        $ajaxController->atualizarValor();
+        exit;
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(['erro' => 'Rota não encontrada']);

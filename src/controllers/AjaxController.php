@@ -56,4 +56,27 @@ class AjaxController
         ]);
     }
 
+    public function atualizarValor()
+    {
+        session_start();
+        $barbeiro_id = $_SESSION['usuario']['id'] ?? null;
+
+        $dados = json_decode(file_get_contents('php://input'), true);
+        $especialidade_id = $dados['especialidade_id'] ?? null;
+        $novo_valor = $dados['novo_valor'] ?? null;
+
+        if (!$barbeiro_id || !$especialidade_id || !$novo_valor) {
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Dados incompletos.']);
+            return;
+        }
+
+        try {
+            $stmt = $this->pdo->prepare("UPDATE barbeiro_especialidade SET valor = ? WHERE barbeiro_id = ? AND especialidade_id = ?");
+            $stmt->execute([$novo_valor, $barbeiro_id, $especialidade_id]);
+
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Valor atualizado com sucesso.']);
+        } catch (Exception $e) {
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Erro: ' . $e->getMessage()]);
+        }
+    }
 }

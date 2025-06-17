@@ -119,6 +119,37 @@ ob_start();
         }
     }
 
+    function editarValor(especialidadeId) {
+        const novoValor = prompt("Digite o novo valor para essa especialidade:");
+
+        if (novoValor === null || novoValor.trim() === '') {
+            alert("Atualização cancelada.");
+            return;
+        }
+
+        fetch('/ajax/atualizarValor', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                especialidade_id: especialidadeId,
+                novo_valor: novoValor
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.sucesso) {
+                document.getElementById('valor-' + especialidadeId).textContent = novoValor;
+                alert("Valor atualizado com sucesso.");
+            } else {
+                alert("Erro ao atualizar valor: " + data.mensagem);
+            }
+        });
+
+        document.getElementById('valor-' + especialidadeId).textContent = novoValor;
+    }
+
 </script>
 
 
