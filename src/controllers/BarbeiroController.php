@@ -20,7 +20,7 @@ class BarbeiroController
         $barbeiro = $this->barbeiroModel->retornaBarbeiro($usuario['id']);
         // dd($barbeiro);
         
-        renderView('barbeiros/index', [
+        renderView('clientes/index', [
             'title' => "Barbeiros - ClickBeard",
             'barbeiro' => $barbeiro
         ], false);

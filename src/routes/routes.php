@@ -67,7 +67,7 @@ switch ($uri) {
         renderView('teste', ['title' => 'Home'], false);
         break;
 
-    case '/barbeiros':
+    case '/usuario':
         // dd('Rota barbeiros');
         require_once __DIR__ . '/../middleware/auth.php';
         $usuario = autenticarUsuario();

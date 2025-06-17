@@ -11,7 +11,6 @@ $cssPage = ''; // Nenhum CSS específico por enquanto
 ob_start();
 ?>
 
-<h1>Lista de Barbeiros</h1>
 <p>Usuário autenticado: <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></p>
 
 <?php if ($barbeiro['status'] === 'ativo'): ?>
