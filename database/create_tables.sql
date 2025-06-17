@@ -36,6 +36,7 @@ CREATE TABLE agendamentos (
     especialidade_id INT,
     data_hora DATETIME,
     cancelado BOOLEAN DEFAULT FALSE,
+    status ENUM('aberto', 'finalizado') DEFAULT 'aberto', -- NOVA COLUNA
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
     FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(cliente_id),
