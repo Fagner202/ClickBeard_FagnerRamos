@@ -17,23 +17,26 @@ class AjaxController
     {
         // Lê os dados JSON enviados pelo JavaScript
         $dados = json_decode(file_get_contents('php://input'), true);
+        // dd($dados);
 
         $barbeiro_id = $dados['barbeiro_id'] ?? null;
         $especialidade_id = $dados['especialidade_id'] ?? null;
+        $valor = $dados['valor'] ?? null;
 
-        if (!$barbeiro_id || !$especialidade_id) {
+        if (!$barbeiro_id || !$especialidade_id || !$valor) {
             http_response_code(400);
             echo json_encode(['erro' => 'Dados inválidos']);
             exit;
         }
-
-        $sucesso = $this->barbeiroEspecialidadeModel->vincular($barbeiro_id, $especialidade_id);
+        
+        $sucesso = $this->barbeiroEspecialidadeModel->vincular($barbeiro_id, $especialidade_id, $valor);
 
         echo json_encode([
             'sucesso' => $sucesso,
             'mensagem' => $sucesso ? 'Vínculo criado com sucesso.' : 'Erro ao criar vínculo.'
         ]);
     }
+
 
     public function desvincularEspecialidade()
     {

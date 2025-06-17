@@ -31,7 +31,7 @@ ob_start();
                         (R$ <span id="valor-<?= $especialidade['id'] ?>"><?= $valores[$especialidade['id']] ?? '0.00' ?></span>)
                         
                         <button 
-                            onclick="toggleEspecialidade(this, <?= $especialidade['id'] ?>)" 
+                            onclick="toggleEspecialidade(this, <?= $especialidade['id'] ?>, <?= $usuario['id'] ?>)" 
                             data-vinculado="<?= $vinculado ? 'true' : 'false' ?>"
                             data-valor="<?= $valores[$especialidade['id']] ?? '' ?>">
                             <?= $vinculado ? 'Desvincular' : 'Vincular' ?>
@@ -65,7 +65,7 @@ ob_start();
 <script>
     const barbeiroId = <?= $barbeiro['cliente_id'] ?>;
 
-    function toggleEspecialidade(button, especialidadeId) {
+    function toggleEspecialidade(button, especialidadeId, barbeiroId) {
         const vinculado = button.getAttribute('data-vinculado') === 'true';
 
         if (!vinculado) {
@@ -76,14 +76,15 @@ ob_start();
                 return;
             }
 
-            fetch('/ajax/vincular', {
+            fetch('/ajax/vincular-especialidade', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     especialidade_id: especialidadeId,
-                    valor: valor
+                    valor: valor,
+                    barbeiro_id: barbeiroId
                 })
             })
             .then(response => response.json())

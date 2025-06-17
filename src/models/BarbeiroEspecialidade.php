@@ -10,11 +10,12 @@ class BarbeiroEspecialidade
         $this->pdo = $pdo;
     }
 
-    public function vincular($barbeiro_id, $especialidade_id)
+    public function vincular($barbeiro_id, $especialidade_id, $valor)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO barbeiro_especialidade (barbeiro_id, especialidade_id) VALUES (?, ?)");
-        return $stmt->execute([$barbeiro_id, $especialidade_id]);
+        $stmt = $this->pdo->prepare("INSERT INTO barbeiro_especialidade (barbeiro_id, especialidade_id, valor) VALUES (?, ?, ?)");
+        return $stmt->execute([$barbeiro_id, $especialidade_id, $valor]);
     }
+
 
     public function desvincular($barbeiro_id, $especialidade_id)
     {
