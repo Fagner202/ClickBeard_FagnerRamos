@@ -3,6 +3,7 @@ $pdo = require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/Barbeiro.php';
 require_once __DIR__ . '/../models/Especialidade.php';
 require_once __DIR__ . '/../models/BarbeiroEspecialidade.php';
+require_once __DIR__ . '/../middleware/auth.php';
 
 class BarbeiroController
 {
