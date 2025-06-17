@@ -36,7 +36,7 @@ class BarbeiroController
 
         if (!$cliente_id || !$idade || !$data_contratacao) {
             $_SESSION['erro'] = "Dados incompletos.";
-            header('Location: /barbeiros');
+            header('Location: /usuario');
             exit;
         }
 
@@ -49,7 +49,7 @@ class BarbeiroController
             } else {
                 $_SESSION['erro'] = "Erro ao reativar perfil de barbeiro.";
             }
-            header('Location: /barbeiros');
+            header('Location: /usuario');
             exit;
         }
 
@@ -60,7 +60,7 @@ class BarbeiroController
             $_SESSION['erro'] = "Erro ao cadastrar barbeiro.";
         }
 
-        header('Location: /barbeiros');
+        header('Location: /usuario');
         exit;
     }
 

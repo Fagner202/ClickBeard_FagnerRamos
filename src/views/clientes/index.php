@@ -13,20 +13,19 @@ ob_start();
 
 <p>Usuário autenticado: <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></p>
 
-<?php if ($barbeiro['status'] === 'ativo'): ?>
+<?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
     <form action="/barbeiros/inativar" method="POST">
         <input type="hidden" name="cliente_id" value="<?= $usuario['id'] ?>">
-        <button type="submit">Deixar de ser barbeiro</button>
+        <button type="submit" class="btn btn-danger">Deixar de ser barbeiro</button>
     </form>
 <?php else: ?>
     <form action="/barbeiros/criar" method="POST">
         <input type="hidden" name="cliente_id" value="<?= $usuario['id'] ?>">
         <input type="hidden" name="idade" value="30">
         <input type="hidden" name="data_contratacao" value="<?= date('Y-m-d') ?>">
-        <button type="submit">Deseja se tornar um barbeiro?</button>
+        <button type="submit" class="btn btn-success">Deseja se tornar um barbeiro?</button>
     </form>
 <?php endif; ?>
-
 
 
 <p><a href="/agendamentos">Voltar ao Dashboard</a></p>
