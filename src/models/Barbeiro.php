@@ -79,4 +79,10 @@ class Barbeiro
         $stmt->execute([$cliente_id]);
         return $stmt->fetch();
     }
+
+    public function getAll()
+    {
+        $stmt = $this->pdo->query("SELECT * FROM barbeiros");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
