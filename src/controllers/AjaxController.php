@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/BarbeiroEspecialidade.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../middleware/auth.php';
 
 class AjaxController
 {
@@ -63,8 +64,9 @@ class AjaxController
 
     public function atualizarValor()
     {
-        session_start();
-        $barbeiro_id = $_SESSION['usuario']['id'] ?? null;
+        $pdo = require __DIR__ . '/../config/database.php';
+        $usuario = autenticarUsuario();
+        $barbeiro_id = $usuario['id'];
 
         $dados = json_decode(file_get_contents('php://input'), true);
         $especialidade_id = $dados['especialidade_id'] ?? null;
@@ -74,9 +76,10 @@ class AjaxController
             echo json_encode(['sucesso' => false, 'mensagem' => 'Dados incompletos.']);
             return;
         }
+        $novo_valor = str_replace(',', '.', $novo_valor);
 
         try {
-            $stmt = $this->pdo->prepare("UPDATE barbeiro_especialidade SET valor = ? WHERE barbeiro_id = ? AND especialidade_id = ?");
+            $stmt = $pdo->prepare("UPDATE barbeiro_especialidade SET valor = ? WHERE barbeiro_id = ? AND especialidade_id = ?");
             $stmt->execute([$novo_valor, $barbeiro_id, $especialidade_id]);
 
             echo json_encode(['sucesso' => true, 'mensagem' => 'Valor atualizado com sucesso.']);
