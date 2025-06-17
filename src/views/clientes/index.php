@@ -11,7 +11,7 @@ ob_start();
 
 <div class="container mt-5">
     <div class="mb-4">
-        <h4>Bem-vindo, <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></h4>
+        <h4 class="fw-bold">Bem-vindo, <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></h4>
     </div>
 
     <?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
@@ -20,34 +20,40 @@ ob_start();
             <button type="submit" class="btn btn-danger">Deixar de ser barbeiro</button>
         </form>
 
-        <h5>Especialidades Disponíveis:</h5>
-        <?php if (!empty($especialidades)): ?>
-            <ul class="list-group" id="lista-especialidades">
-                <?php foreach ($especialidades as $especialidade): 
-                    $vinculado = in_array($especialidade['id'], $especialidadesVinculadas ?? []);
-                ?>
-                    <li id="especialidade-<?= $especialidade['id'] ?>">
-                        <?= htmlspecialchars($especialidade['nome']) ?> 
-                        (R$ <span id="valor-<?= $especialidade['id'] ?>"><?= $valores[$especialidade['id']] ?? '0.00' ?></span>)
-                        
-                        <button 
-                            onclick="toggleEspecialidade(this, <?= $especialidade['id'] ?>, <?= $usuario['id'] ?>)" 
-                            data-vinculado="<?= $vinculado ? 'true' : 'false' ?>"
-                            data-valor="<?= $valores[$especialidade['id']] ?? '' ?>">
-                            <?= $vinculado ? 'Desvincular' : 'Vincular' ?>
-                        </button>
+        <div class="mb-3">
+            <h5 class="mb-3">Especialidades Disponíveis:</h5>
+            <?php if (!empty($especialidades)): ?>
+                <ul class="list-group" id="lista-especialidades">
+                    <?php foreach ($especialidades as $especialidade): 
+                        $vinculado = in_array($especialidade['id'], $especialidadesVinculadas ?? []);
+                    ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" id="especialidade-<?= $especialidade['id'] ?>">
+                            <div>
+                                <strong><?= htmlspecialchars($especialidade['nome']) ?></strong>
+                                <small class="text-muted ms-2">(R$ <span id="valor-<?= $especialidade['id'] ?>"><?= $valores[$especialidade['id']] ?? '0.00' ?></span>)</small>
+                            </div>
+                            <div class="btn-group mt-2 mt-sm-0">
+                                <button 
+                                    class="btn btn-sm <?= $vinculado ? 'btn-outline-danger' : 'btn-outline-success' ?>" 
+                                    onclick="toggleEspecialidade(this, <?= $especialidade['id'] ?>, <?= $usuario['id'] ?>)" 
+                                    data-vinculado="<?= $vinculado ? 'true' : 'false' ?>"
+                                    data-valor="<?= $valores[$especialidade['id']] ?? '' ?>">
+                                    <?= $vinculado ? 'Desvincular' : 'Vincular' ?>
+                                </button>
 
-                        <?php if ($vinculado): ?>
-                            <button onclick="editarValor(<?= $especialidade['id'] ?>)">Editar Valor</button>
-                        <?php endif; ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <div class="alert alert-warning mt-3">
-                Você ainda não tem especialidades cadastradas.
-            </div>
-        <?php endif; ?>
+                                <?php if ($vinculado): ?>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editarValor(<?= $especialidade['id'] ?>)">Editar Valor</button>
+                                <?php endif; ?>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <div class="alert alert-warning mt-3">
+                    Você ainda não tem especialidades cadastradas.
+                </div>
+            <?php endif; ?>
+        </div>
 
     <?php else: ?>
         <form action="/barbeiros/criar" method="POST" class="mb-4">
@@ -60,6 +66,7 @@ ob_start();
 
     <a href="/agendamentos" class="btn btn-secondary mt-3">Voltar ao Dashboard</a>
 </div>
+
 
 
 <script>
