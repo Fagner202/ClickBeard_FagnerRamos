@@ -1,28 +1,31 @@
 <?php
 $pdo = require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/Barbeiro.php';
+require_once __DIR__ . '/../models/Especialidade.php';
 
 class BarbeiroController
 {
     private $barbeiroModel;
+    private $especialidadeModel;
 
     public function __construct($pdo)
     {
         $pdo = require __DIR__ . '/../config/database.php';
         $this->barbeiroModel = new Barbeiro($pdo);
+        $this->especialidadeModel = new Especialidade($pdo);
     }
 
     function index()
     {
         $usuario = autenticarUsuario();
-        // dd($usuario);
-        // dd('Na controller listarBarbeiros');
         $barbeiro = $this->barbeiroModel->retornaBarbeiro($usuario['id']);
-        // dd($barbeiro);
+        $especialidades = $this->especialidadeModel->getAllEspecialidade();
+        // dd($especialidades);
         
         renderView('clientes/index', [
             'title' => "Barbeiros - ClickBeard",
-            'barbeiro' => $barbeiro
+            'barbeiro' => $barbeiro,
+            'especialidades' => $especialidades
         ], false);
     }
 
@@ -71,7 +74,7 @@ class BarbeiroController
 
         if (!$cliente_id) {
             $_SESSION['erro'] = "Cliente inválido.";
-            header('Location: /barbeiros');
+            header('Location: /usuario');
             exit;
         }
 
@@ -81,7 +84,7 @@ class BarbeiroController
             $_SESSION['erro'] = "Erro ao inativar barbeiro.";
         }
 
-        header('Location: /barbeiros');
+        header('Location: /usuario');
         exit;
     }
 }

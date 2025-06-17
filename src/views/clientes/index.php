@@ -6,8 +6,6 @@ $usuario = autenticarUsuario();
 $title = 'Gerenciar Barbeiros';
 $cssPage = ''; // Nenhum CSS específico por enquanto
 
-// dd($barbeiro);
-
 ob_start();
 ?>
 
@@ -16,17 +14,28 @@ ob_start();
 <?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
     <form action="/barbeiros/inativar" method="POST">
         <input type="hidden" name="cliente_id" value="<?= $usuario['id'] ?>">
-        <button type="submit" class="btn btn-danger">Deixar de ser barbeiro</button>
+        <button type="submit">Deixar de ser barbeiro</button>
     </form>
+
+    <h2>Suas especialidades:</h2>
+    <?php if (!empty($especialidades)): ?>
+        <ul>
+            <?php foreach ($especialidades as $especialidade): ?>
+                <li><?= htmlspecialchars($especialidade['nome']) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>Você ainda não tem especialidades cadastradas.</p>
+    <?php endif; ?>
+
 <?php else: ?>
     <form action="/barbeiros/criar" method="POST">
         <input type="hidden" name="cliente_id" value="<?= $usuario['id'] ?>">
         <input type="hidden" name="idade" value="30">
         <input type="hidden" name="data_contratacao" value="<?= date('Y-m-d') ?>">
-        <button type="submit" class="btn btn-success">Deseja se tornar um barbeiro?</button>
+        <button type="submit">Deseja se tornar um barbeiro?</button>
     </form>
 <?php endif; ?>
-
 
 <p><a href="/agendamentos">Voltar ao Dashboard</a></p>
 
