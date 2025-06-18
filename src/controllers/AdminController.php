@@ -31,9 +31,7 @@ class AdminController {
             exit;
         }
 
-        dd('Na Controller de Login');
-
         $barbeiros = $this->barbeiroModel->listarTodosComEspecialidades();
-        renderView('administrador/index', ['barbeiros' => $barbeiros]);
+        renderView('administrador/index', ['barbeiros' => $barbeiros], false);
     }
 }

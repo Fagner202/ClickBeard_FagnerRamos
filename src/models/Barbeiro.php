@@ -92,4 +92,45 @@ class Barbeiro
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function listarTodosComEspecialidades()
+    {
+        $sql = "
+            SELECT 
+                c.id AS cliente_id,
+                c.nome,
+                b.idade,
+                b.data_contratacao,
+                e.nome AS especialidade
+            FROM barbeiros b
+            JOIN clientes c ON c.id = b.cliente_id
+            LEFT JOIN barbeiro_especialidade be ON be.barbeiro_id = b.cliente_id
+            LEFT JOIN especialidades e ON e.id = be.especialidade_id
+            ORDER BY c.nome
+        ";
+
+        $stmt = $this->pdo->query($sql);
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Agrupa por barbeiro
+        $barbeiros = [];
+        foreach ($dados as $linha) {
+            $id = $linha['cliente_id'];
+            if (!isset($barbeiros[$id])) {
+                $barbeiros[$id] = [
+                    'id' => $id,
+                    'nome' => $linha['nome'],
+                    'idade' => $linha['idade'],
+                    'data_contratacao' => $linha['data_contratacao'],
+                    'especialidades' => []
+                ];
+            }
+
+            if ($linha['especialidade']) {
+                $barbeiros[$id]['especialidades'][] = $linha['especialidade'];
+            }
+        }
+
+        return array_values($barbeiros);
+    }
 }
