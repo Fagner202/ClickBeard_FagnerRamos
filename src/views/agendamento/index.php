@@ -338,28 +338,35 @@ ob_start();
       const select = document.getElementById('editar_barbeiro_id');
       select.innerHTML = '<option value="">Selecione um barbeiro</option>';
 
-      console.log(barbeiros);
-      
       barbeiros.forEach(barbeiro => {
-        const option = document.createElement('option');
-        option.value = barbeiro.id;
-        option.textContent = `Barbeiro ID ${barbeiro.cliente_id}`;
-        option.selected = (barbeiro.id == barbeiroAtualId);
-        select.appendChild(option);
+        if (barbeiro.cliente_id) {
+          const option = document.createElement('option');
+          option.value = barbeiro.cliente_id;
+          option.textContent = `Barbeiro #${barbeiro.cliente_id}`;
+          option.selected = (barbeiro.cliente_id == barbeiroAtualId);
+          select.appendChild(option);
+        }
       });
-      
-      // Dispara o evento change para carregar as especialidades
-      select.dispatchEvent(new Event('change'));
+
+      if (select.options.length > 1) {
+        select.dispatchEvent(new Event('change'));
+      }
     })
     .catch(error => {
       console.error('Erro ao carregar barbeiros:', error);
     });
   }
 
+
+
   // Event listener para carregar especialidades quando um barbeiro é selecionado
   document.getElementById('editar_barbeiro_id').addEventListener('change', function() {
     const barbeiroId = this.value;
     if (!barbeiroId) return;
+
+    // console.log(barbeiroId);
+    // console.log('kdkd');
+    // console.log(document.getElementById('editar_barbeiro_id').value);
     
     fetch(`/ajax/especialidades-barbeiro/${barbeiroId}`, {
       method: 'GET',

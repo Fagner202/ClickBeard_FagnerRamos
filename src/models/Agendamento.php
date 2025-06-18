@@ -60,4 +60,23 @@ class Agendamento
         
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function verificarPropriedade($agendamentoId, $usuarioId)
+    {
+        $sql = "SELECT id FROM agendamentos WHERE id = ? AND cliente_id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$agendamentoId, $usuarioId]);
+        
+        return (bool)$stmt->fetch();
+    }
+
+    public function atualizar($agendamentoId, $dataHora, $barbeiroId, $especialidadeId)
+    {
+        $sql = "UPDATE agendamentos 
+                SET data_hora = ?, barbeiro_id = ?, especialidade_id = ?
+                WHERE id = ?";
+        
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$dataHora, $barbeiroId, $especialidadeId, $agendamentoId]);
+    }
 }

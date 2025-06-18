@@ -88,9 +88,11 @@ class AjaxController
         }
     }
 
-    public function buscarEspecialidadesPorBarbeiro()
+    public function buscarEspecialidadesPorBarbeiro($dados)
     {
         $barbeiro_id = $_GET['barbeiro_id'] ?? null;
+        $barbeiro_id = $dados[0];
+        // dd($barbeiro_id);
 
         if (!$barbeiro_id) {
             http_response_code(400);
@@ -99,6 +101,7 @@ class AjaxController
         }
 
         $dados = $this->barbeiroEspecialidadeModel->getEspecialidadesComValor($barbeiro_id);
+        // dd($dados);
         echo json_encode($dados);
     }
 
@@ -195,6 +198,40 @@ class AjaxController
         
         header('Content-Type: application/json');
         echo json_encode($barbeiros);
+    }
+
+    public function atualizarAgendamento()
+    {
+        require_once __DIR__ . '/../models/Agendamento.php';
+        $dados = json_decode(file_get_contents('php://input'), true);
+        $usuario = autenticarUsuario();
+        
+        $agendamentoId = $dados['agendamento_id'] ?? null;
+        $dataHora = $dados['data_hora'] ?? null;
+        $barbeiroId = $dados['barbeiro_id'] ?? null;
+        $especialidadeId = $dados['especialidade_id'] ?? null;
+        
+        if (!$agendamentoId || !$dataHora || !$barbeiroId || !$especialidadeId) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Dados incompletos.']);
+            return;
+        }
+        
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+        
+        // Verifica se o agendamento pertence ao usuário
+        if (!$model->verificarPropriedade($agendamentoId, $usuario['id'])) {
+            http_response_code(403);
+            echo json_encode(['erro' => 'Você não tem permissão para editar este agendamento.']);
+            return;
+        }
+        
+        $sucesso = $model->atualizar($agendamentoId, $dataHora, $barbeiroId, $especialidadeId);
+        
+        echo json_encode([
+            'sucesso' => $sucesso,
+            'mensagem' => $sucesso ? 'Agendamento atualizado com sucesso!' : 'Erro ao atualizar agendamento.'
+        ]);
     }
 
 }
