@@ -24,18 +24,23 @@ ob_start();
   </div>
 
   <!-- Lista de barbeiros -->
-  <div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     <?php foreach ($barbeiros as $barbeiro): ?>
       <div class="col">
-        <div class="card shadow-sm h-100">
-          <div class="card-body">
-            <h5 class="card-title">Barbeiro ID <?= htmlspecialchars($barbeiro['nome']) ?></h5>
-            <p class="card-text mb-1"><strong>Idade:</strong> <?= htmlspecialchars($barbeiro['idade']) ?></p>
-            <p class="card-text mb-1"><strong>Data de Contratação:</strong> <?= htmlspecialchars($barbeiro['data_contratacao']) ?></p>
-            <p class="card-text mb-3"><strong>Status:</strong> <?= htmlspecialchars($barbeiro['status']) ?></p>
+        <div class="card shadow-sm h-100 border-0 rounded-4">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-primary text-center fw-bold mb-3">
+              <?= htmlspecialchars($barbeiro['nome']) ?>
+            </h5>
 
-            <button class="btn btn-success w-100" onclick="abrirModalAgendamento(<?= $barbeiro['cliente_id'] ?>)">
-              <i class="bi bi-clock"></i> Realizar Agendamento
+            <span class="badge bg-success mb-4">
+              <?= htmlspecialchars(ucfirst($barbeiro['status'])) ?>
+            </span>
+
+            <button 
+              class="btn btn-outline-primary mt-auto rounded-pill" 
+              onclick="abrirModalAgendamento(<?= $barbeiro['cliente_id'] ?>)">
+              <i class="bi bi-calendar-check"></i> Agendar com <?= htmlspecialchars($barbeiro['nome']) ?>
             </button>
           </div>
         </div>
