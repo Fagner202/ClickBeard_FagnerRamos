@@ -314,7 +314,7 @@ ob_start();
       document.getElementById('editar_data_hora').value = localISOTime;
       
       // Carrega os barbeiros disponíveis
-      carregarBarbeirosParaEdicao(agendamento.barbeiro_id);
+      carregarBarbeirosParaEdicao(agendamento.barbeiro_id, agendamento.especialidade_id)
       
       // Abre o modal de edição
       const modal = new bootstrap.Modal(document.getElementById('modalEditarAgendamento'));
@@ -368,9 +368,9 @@ ob_start();
 
       especialidades.forEach(especialidade => {
         const option = document.createElement('option');
-        option.value = especialidade.id;
+        option.value = especialidade.especialidade_id;
         option.textContent = especialidade.nome;
-        option.selected = (especialidade.id == especialidadeAtualId);
+        option.selected = (especialidade.especialidade_id == especialidadeAtualId);
         select.appendChild(option);
       });
     })
@@ -384,8 +384,6 @@ ob_start();
     const dataHora = document.getElementById('editar_data_hora').value;
     const barbeiroId = document.getElementById('editar_barbeiro_id').value;
     const especialidadeId = document.getElementById('editar_especialidade_id').value;
-
-    console.log(document.getElementById('editar_especialidade_id').value); // está retorando undfined
     
     if (!dataHora || !barbeiroId || !especialidadeId) {
       alert('Por favor, preencha todos os campos.');
@@ -415,6 +413,7 @@ ob_start();
         
         // Atualiza a lista de agendamentos
         carregarMeusAgendamentos();
+        location.reload();
       } else {
         alert('Erro: ' + data.mensagem);
       }

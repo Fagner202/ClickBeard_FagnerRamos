@@ -206,7 +206,6 @@ class AjaxController
         $dados = json_decode(file_get_contents('php://input'), true);
         $usuario = autenticarUsuario();
 
-        dd($dados);
         
         $agendamentoId = $dados['agendamento_id'] ?? null;
         $dataHora = $dados['data_hora'] ?? null;
