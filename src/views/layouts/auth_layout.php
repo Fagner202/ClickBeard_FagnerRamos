@@ -28,8 +28,8 @@ $usuario = $_SESSION['nome'] ?? null;
         </div>
         <ul class="nav flex-column pt-3">
             <li class="nav-item">
-                <a class="nav-link <?= ($currentUrl === '/agendamentos') ? 'active' : '' ?>" href="/agendamentos">
-                    <i class="bi bi-house-door"></i> Dashboard
+                <a class="nav-link <?= ($currentUrl === '/') ? 'active' : '' ?>" href="/">
+                    <i class="bi bi-house-door"></i> Home
                 </a>
             </li>
             
@@ -51,10 +51,10 @@ $usuario = $_SESSION['nome'] ?? null;
                 </a>
             </li> -->
 
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people"></i> Clientes</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-clock-history"></i> Histórico</a></li>
-            <li class="nav-item mt-4"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Configurações</a></li>
-            <li class="nav-item"><a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Sairdd</a></li>
+            <!-- <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people"></i> Clientes</a></li> -->
+            <!-- <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-clock-history"></i> Histórico</a></li> -->
+            <!-- <li class="nav-item mt-4"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Configurações</a></li> -->
+            <li class="nav-item"><a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
         </ul>
     </nav>
     <?php endif; ?>

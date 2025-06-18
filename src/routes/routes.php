@@ -17,10 +17,10 @@ $routes = [
     'GET' => [
         '/register' => fn() => renderView('cadastro', ['title' => 'Cadastro'], false),
         '/login'    => fn() => renderView('login', ['title' => 'Login'], false),
-        '/agendamentos' => function () {
+        '/' => function () {
             require_once __DIR__ . '/../middleware/auth.php';
             $usuario = autenticarUsuario();
-            renderView('agendamento', ['title' => 'Agendamentos', 'usuario' => $usuario], false);
+            renderView('index', ['title' => 'Agendamentos', 'usuario' => $usuario], false);
         },
         '/logout' => fn() => require_once __DIR__ . '/../controllers/logout.php',
         '/teste'  => function () {
