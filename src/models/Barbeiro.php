@@ -85,4 +85,11 @@ class Barbeiro
         $stmt = $this->pdo->query("SELECT * FROM barbeiros");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function listarAtivosV2()
+    {
+        $sql = "SELECT * FROM barbeiros WHERE status = 'Ativo'";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -337,11 +337,13 @@ ob_start();
     .then(barbeiros => {
       const select = document.getElementById('editar_barbeiro_id');
       select.innerHTML = '<option value="">Selecione um barbeiro</option>';
+
+      console.log(barbeiros);
       
       barbeiros.forEach(barbeiro => {
         const option = document.createElement('option');
         option.value = barbeiro.id;
-        option.textContent = `Barbeiro ID ${barbeiro.id}`;
+        option.textContent = `Barbeiro ID ${barbeiro.cliente_id}`;
         option.selected = (barbeiro.id == barbeiroAtualId);
         select.appendChild(option);
       });

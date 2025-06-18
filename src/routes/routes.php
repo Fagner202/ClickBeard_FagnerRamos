@@ -47,6 +47,7 @@ $routes = [
         '/ajax/criar-agendamento'         => fn() => $ajaxController->criarAgendamento(),
         '/ajax/meus-agendamentos'         => fn() => $ajaxController->buscarAgendamentosUsuario(),
         '/ajax/buscar-agendamento/(\d+)'  => fn($matches) => $ajaxController->buscarAgendamento($matches),
+        '/ajax/barbeiros-disponiveis' => fn() => $ajaxController->listarBarbeirosDisponiveis(),
     ]
 ];
 

@@ -185,4 +185,16 @@ class AjaxController
         echo json_encode($agendamento);
     }
 
+    public function listarBarbeirosDisponiveis()
+    {
+        require_once __DIR__ . '/../models/Barbeiro.php';
+        
+        $model = new Barbeiro(require __DIR__ . '/../config/database.php');
+        $barbeiros = $model->listarAtivosV2();
+        // dd($barbeiros);
+        
+        header('Content-Type: application/json');
+        echo json_encode($barbeiros);
+    }
+
 }
