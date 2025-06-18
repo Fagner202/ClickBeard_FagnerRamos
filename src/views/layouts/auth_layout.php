@@ -35,21 +35,21 @@ $usuario = $_SESSION['nome'] ?? null;
             
             <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/agendamento') ? 'active' : '' ?>" href="/agendamento">
-                    <i class="bi bi-house-door"></i> Agendamento
+                    <i class="bi bi-calendar-plus"></i> Agendamento
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/usuario') ? 'active' : '' ?>" href="/usuario">
-                    <i class="bi bi-person"></i> Usuário
+                    <i class="bi bi-scissors"></i> Barbeiro
                 </a>
             </li>
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/teste') ? 'active' : '' ?>" href="/teste">
                     <i class="bi bi-calendar-plus"></i> Página Teste
                 </a>
-            </li>
+            </li> -->
 
             <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people"></i> Clientes</a></li>
             <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-clock-history"></i> Histórico</a></li>
