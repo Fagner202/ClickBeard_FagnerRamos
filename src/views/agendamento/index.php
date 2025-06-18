@@ -159,10 +159,6 @@ ob_start();
 
 <script src="/js/agendamento.js"></script>
 
-<script>
-  
-</script>
-
 <?php
 $content = ob_get_clean();
 require __DIR__ . '/../layouts/auth_layout.php';
