@@ -7,6 +7,7 @@ require_once __DIR__ . '/../controllers/BarbeiroController.php';
 require_once __DIR__ . '/../controllers/AjaxController.php';
 require_once __DIR__ . '/../controllers/AgendamentoController.php';
 require_once __DIR__ . '/../controllers/AdminController.php';
+require_once __DIR__ . '/../models/Especialidade.php';
 
 $pdo = require_once __DIR__ . '/../config/database.php';
 $barbeiroController    = new BarbeiroController($pdo);
@@ -55,6 +56,10 @@ $routes = [
         '/ajax/atualizar-agendamento'         => fn() => $ajaxController->atualizarAgendamento(),
         '/ajax/agendamentos-barbeiro'         => fn() => $ajaxController->buscarAgendamentosPorBarbeiro($_GET),
         '/ajax/finalizar-agendamento'         => fn() => $ajaxController->finalizarAgendamento(),
+        '/ajax/especialidades/listar'   => fn() => $ajaxController->listarEspecialidades(),
+        '/ajax/especialidades/criar'    => fn() => $ajaxController->criarEspecialidade(),
+        '/ajax/especialidades/editar'   => fn() => $ajaxController->editarEspecialidade(),
+        '/ajax/especialidades/excluir'  => fn() => $ajaxController->excluirEspecialidade(),
 
     ]
 ];

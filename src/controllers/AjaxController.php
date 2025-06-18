@@ -1,16 +1,19 @@
 <?php
 
 require_once __DIR__ . '/../models/BarbeiroEspecialidade.php';
+require_once __DIR__ . '/../models/Especialidade.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/auth.php';
 
 class AjaxController
 {
     private $barbeiroEspecialidadeModel;
+    private $especialidadeModel;
 
     public function __construct($pdo)
     {
         $pdo = require __DIR__ . '/../config/database.php';
+        $this->especialidadeModel = new Especialidade($pdo);
         $this->barbeiroEspecialidadeModel = new BarbeiroEspecialidade($pdo);
     }
 
@@ -276,6 +279,58 @@ class AjaxController
             'sucesso' => $sucesso,
             'mensagem' => $sucesso ? 'Agendamento finalizado.' : 'Erro ao finalizar.'
         ]);
+    }
+
+    public function listarEspecialidades()
+    {
+        $especialidades = $this->especialidadeModel->getAllEspecialidade();
+        echo json_encode($especialidades);
+    }
+
+    public function criarEspecialidade()
+    {
+        $dados = json_decode(file_get_contents('php://input'), true);
+        $nome = trim($dados['nome'] ?? '');
+
+        if (!$nome) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Nome é obrigatório']);
+            return;
+        }
+
+        $this->especialidadeModel->create($nome);
+        echo json_encode(['sucesso' => true]);
+    }
+
+    public function editarEspecialidade()
+    {
+        $dados = json_decode(file_get_contents('php://input'), true);
+        $id = $dados['id'] ?? null;
+        $nome = trim($dados['nome'] ?? '');
+
+        if (!$id || !$nome) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Dados inválidos']);
+            return;
+        }
+
+        $this->especialidadeModel->update($id, $nome);
+        echo json_encode(['sucesso' => true]);
+    }
+
+    public function excluirEspecialidade()
+    {
+        $dados = json_decode(file_get_contents('php://input'), true);
+        $id = $dados['id'] ?? null;
+
+        if (!$id) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'ID não informado']);
+            return;
+        }
+
+        $this->especialidadeModel->delete($id);
+        echo json_encode(['sucesso' => true]);
     }
 
 }
