@@ -108,6 +108,48 @@ ob_start();
   </div>
 </div>
 
+<!-- Modal Editar Agendamento -->
+<div class="modal fade" id="modalEditarAgendamento" tabindex="-1" aria-labelledby="modalEditarAgendamentoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarAgendamentoLabel">Editar Agendamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditarAgendamento">
+          <input type="hidden" id="editar_agendamento_id">
+          
+          <div class="mb-3">
+            <label for="editar_data_hora" class="form-label">Data e Hora</label>
+            <input type="datetime-local" class="form-control" id="editar_data_hora" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="editar_barbeiro_id" class="form-label">Barbeiro</label>
+            <select class="form-select" id="editar_barbeiro_id" required>
+              <option value="">Selecione um barbeiro</option>
+              <!-- Opções serão carregadas via JavaScript -->
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="editar_especialidade_id" class="form-label">Serviço</label>
+            <select class="form-select" id="editar_especialidade_id" required>
+              <option value="">Selecione um serviço</option>
+              <!-- Opções serão carregadas via JavaScript -->
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="salvarEdicaoAgendamento()">Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   function abrirModalAgendamento(barbeiroId) {
   // Define barbeiro_id no input hidden
@@ -248,9 +290,140 @@ ob_start();
   }
 
   function editarAgendamento(agendamentoId) {
-    // Implemente a lógica de edição aqui
-    alert('Editar agendamento ' + agendamentoId);
-    // Você pode abrir outro modal ou redirecionar para uma página de edição
+    // Primeiro busca os dados do agendamento
+    fetch(`/ajax/buscar-agendamento/${agendamentoId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(agendamento => {
+      if (agendamento.erro) {
+        alert('Erro: ' + agendamento.erro);
+        return;
+      }
+      
+      // Preenche o modal com os dados do agendamento
+      document.getElementById('editar_agendamento_id').value = agendamento.id;
+      
+      // Formata a data para o input datetime-local (YYYY-MM-DDTHH:MM)
+      const dataHora = new Date(agendamento.data_hora);
+      const timezoneOffset = dataHora.getTimezoneOffset() * 60000; // offset em milissegundos
+      const localISOTime = new Date(dataHora - timezoneOffset).toISOString().slice(0, 16);
+      document.getElementById('editar_data_hora').value = localISOTime;
+      
+      // Carrega os barbeiros disponíveis
+      carregarBarbeirosParaEdicao(agendamento.barbeiro_id);
+      
+      // Abre o modal de edição
+      const modal = new bootstrap.Modal(document.getElementById('modalEditarAgendamento'));
+      modal.show();
+    })
+    .catch(error => {
+      console.error('Erro ao buscar agendamento:', error);
+      alert('Erro ao buscar dados do agendamento.');
+    });
+  }
+
+  function carregarBarbeirosParaEdicao(barbeiroAtualId) {
+    fetch('/ajax/barbeiros-disponiveis', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(barbeiros => {
+      const select = document.getElementById('editar_barbeiro_id');
+      select.innerHTML = '<option value="">Selecione um barbeiro</option>';
+      
+      barbeiros.forEach(barbeiro => {
+        const option = document.createElement('option');
+        option.value = barbeiro.id;
+        option.textContent = `Barbeiro ID ${barbeiro.id}`;
+        option.selected = (barbeiro.id == barbeiroAtualId);
+        select.appendChild(option);
+      });
+      
+      // Dispara o evento change para carregar as especialidades
+      select.dispatchEvent(new Event('change'));
+    })
+    .catch(error => {
+      console.error('Erro ao carregar barbeiros:', error);
+    });
+  }
+
+  // Event listener para carregar especialidades quando um barbeiro é selecionado
+  document.getElementById('editar_barbeiro_id').addEventListener('change', function() {
+    const barbeiroId = this.value;
+    if (!barbeiroId) return;
+    
+    fetch(`/ajax/especialidades-barbeiro/${barbeiroId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(especialidades => {
+      const select = document.getElementById('editar_especialidade_id');
+      select.innerHTML = '<option value="">Selecione um serviço</option>';
+      
+      especialidades.forEach(especialidade => {
+        const option = document.createElement('option');
+        option.value = especialidade.id;
+        option.textContent = especialidade.nome;
+        select.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('Erro ao carregar especialidades:', error);
+    });
+  });
+
+  function salvarEdicaoAgendamento() {
+    const agendamentoId = document.getElementById('editar_agendamento_id').value;
+    const dataHora = document.getElementById('editar_data_hora').value;
+    const barbeiroId = document.getElementById('editar_barbeiro_id').value;
+    const especialidadeId = document.getElementById('editar_especialidade_id').value;
+    
+    if (!dataHora || !barbeiroId || !especialidadeId) {
+      alert('Por favor, preencha todos os campos.');
+      return;
+    }
+    
+    fetch('/ajax/atualizar-agendamento', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        agendamento_id: agendamentoId,
+        data_hora: dataHora,
+        barbeiro_id: barbeiroId,
+        especialidade_id: especialidadeId
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.sucesso) {
+        alert('Agendamento atualizado com sucesso!');
+        
+        // Fecha o modal de edição
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditarAgendamento'));
+        modal.hide();
+        
+        // Atualiza a lista de agendamentos
+        carregarMeusAgendamentos();
+      } else {
+        alert('Erro: ' + data.mensagem);
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao atualizar agendamento:', error);
+      alert('Erro ao atualizar agendamento.');
+    });
   }
 
   function cancelarAgendamento(agendamentoId) {
