@@ -326,7 +326,7 @@ ob_start();
     });
   }
 
-  function carregarBarbeirosParaEdicao(barbeiroAtualId) {
+  function carregarBarbeirosParaEdicao(barbeiroAtualId, especialidadeAtualId = null) {
     fetch('/ajax/barbeiros-disponiveis', {
       method: 'GET',
       headers: {
@@ -339,35 +339,22 @@ ob_start();
       select.innerHTML = '<option value="">Selecione um barbeiro</option>';
 
       barbeiros.forEach(barbeiro => {
-        if (barbeiro.cliente_id) {
-          const option = document.createElement('option');
-          option.value = barbeiro.cliente_id;
-          option.textContent = `Barbeiro #${barbeiro.cliente_id}`;
-          option.selected = (barbeiro.cliente_id == barbeiroAtualId);
-          select.appendChild(option);
-        }
+        const option = document.createElement('option');
+        option.value = barbeiro.cliente_id;
+        option.textContent = `Barbeiro #${barbeiro.cliente_id}`;
+        option.selected = (barbeiro.cliente_id == barbeiroAtualId);
+        select.appendChild(option);
       });
 
-      if (select.options.length > 1) {
-        select.dispatchEvent(new Event('change'));
-      }
+      // Aguarda o carregamento das especialidades
+      carregarEspecialidadesPorBarbeiro(barbeiroAtualId, especialidadeAtualId);
     })
     .catch(error => {
       console.error('Erro ao carregar barbeiros:', error);
     });
   }
 
-
-
-  // Event listener para carregar especialidades quando um barbeiro é selecionado
-  document.getElementById('editar_barbeiro_id').addEventListener('change', function() {
-    const barbeiroId = this.value;
-    if (!barbeiroId) return;
-
-    // console.log(barbeiroId);
-    // console.log('kdkd');
-    // console.log(document.getElementById('editar_barbeiro_id').value);
-    
+  function carregarEspecialidadesPorBarbeiro(barbeiroId, especialidadeAtualId = null) {
     fetch(`/ajax/especialidades-barbeiro/${barbeiroId}`, {
       method: 'GET',
       headers: {
@@ -378,24 +365,27 @@ ob_start();
     .then(especialidades => {
       const select = document.getElementById('editar_especialidade_id');
       select.innerHTML = '<option value="">Selecione um serviço</option>';
-      
+
       especialidades.forEach(especialidade => {
         const option = document.createElement('option');
         option.value = especialidade.id;
         option.textContent = especialidade.nome;
+        option.selected = (especialidade.id == especialidadeAtualId);
         select.appendChild(option);
       });
     })
     .catch(error => {
       console.error('Erro ao carregar especialidades:', error);
     });
-  });
+  }
 
   function salvarEdicaoAgendamento() {
     const agendamentoId = document.getElementById('editar_agendamento_id').value;
     const dataHora = document.getElementById('editar_data_hora').value;
     const barbeiroId = document.getElementById('editar_barbeiro_id').value;
     const especialidadeId = document.getElementById('editar_especialidade_id').value;
+
+    console.log(document.getElementById('editar_especialidade_id').value); // está retorando undfined
     
     if (!dataHora || !barbeiroId || !especialidadeId) {
       alert('Por favor, preencha todos os campos.');

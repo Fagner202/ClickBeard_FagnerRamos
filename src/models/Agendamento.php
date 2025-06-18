@@ -72,6 +72,11 @@ class Agendamento
 
     public function atualizar($agendamentoId, $dataHora, $barbeiroId, $especialidadeId)
     {
+        // dd($agendamentoId);
+        // dd($dataHora);
+        // dd($barbeiroId);
+        dd($especialidadeId);
+
         $sql = "UPDATE agendamentos 
                 SET data_hora = ?, barbeiro_id = ?, especialidade_id = ?
                 WHERE id = ?";
