@@ -1,55 +1,86 @@
 <div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Painel do Administrador</h2>
-    <span class="badge bg-dark fs-6">Gerencie barbeiros e especialidades</span>
+  <h2 class="fw-bold mb-4">Painel do Administrador</h2>
+
+  <!-- Botões de navegação -->
+  <div class="mb-4 d-flex gap-3">
+    <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#collapseBarbeiros" aria-expanded="true" aria-controls="collapseBarbeiros">
+      👨‍🔧 Gerenciar Barbeiros
+    </button>
+    <button class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#collapseEspecialidades" aria-expanded="false" aria-controls="collapseEspecialidades">
+      💈 Gerenciar Especialidades
+    </button>
   </div>
 
-  <!-- Seção de Barbeiros -->
-  <div class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4><i class="bi bi-scissors"></i> Barbeiros</h4>
-    </div>
+  <!-- Accordion para exibir apenas uma seção por vez -->
+  <div class="accordion" id="adminAccordion">
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <?php foreach ($barbeiros as $barbeiro): ?>
-        <div class="col">
-          <div class="card shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title"><?= htmlspecialchars($barbeiro['nome']) ?></h5>
-              <p class="card-text mb-1"><strong>Idade:</strong> <?= htmlspecialchars($barbeiro['idade']) ?></p>
-              <p class="card-text mb-1"><strong>Contratado em:</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($barbeiro['data_contratacao']))) ?></p>
-              <p class="card-text mb-2"><strong>Especialidades:</strong><br>
-                <?= !empty($barbeiro['especialidades']) 
-                  ? implode('<br>', array_map('htmlspecialchars', $barbeiro['especialidades'])) 
-                  : '<span class="text-muted">Nenhuma cadastrada</span>' ?>
-              </p>
-              <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-sm btn-outline-primary">Editar</button>
-                <button class="btn btn-sm btn-outline-danger">Excluir</button>
-              </div>
-            </div>
+    <!-- Barbeiros -->
+    <div class="accordion-item">
+      <div id="collapseBarbeiros" class="accordion-collapse collapse show" data-bs-parent="#adminAccordion">
+        <div class="accordion-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>👨‍🔧 Barbeiros Cadastrados</h4>
+            <button class="btn btn-success">
+              <i class="bi bi-plus-circle"></i> Novo Barbeiro
+            </button>
           </div>
+
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead class="table-dark">
+                <tr>
+                  <th>Nome</th>
+                  <th>Idade</th>
+                  <th>Data de Contratação</th>
+                  <th>Especialidades</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($barbeiros as $barbeiro): ?>
+                  <tr>
+                    <td><?= htmlspecialchars($barbeiro['nome']) ?></td>
+                    <td><?= htmlspecialchars($barbeiro['idade']) ?></td>
+                    <td><?= htmlspecialchars(date('d/m/Y', strtotime($barbeiro['data_contratacao']))) ?></td>
+                    <td><?= !empty($barbeiro['especialidades']) 
+                      ? implode(', ', array_map('htmlspecialchars', $barbeiro['especialidades'])) 
+                      : '<span class="text-muted">Nenhuma</span>' ?>
+                    </td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil"></i></button>
+                      <button class="btn btn-sm btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></button>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+
         </div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-
-  <!-- Seção de Especialidades -->
-  <div class="mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4><i class="bi bi-star"></i> Especialidades</h4>
-      <button class="btn btn-success" onclick="abrirModalCriarEspecialidade()">
-        <i class="bi bi-plus-circle"></i> Nova Especialidade
-      </button>
+      </div>
     </div>
 
-    <ul id="lista-especialidades" class="list-group">
-      <!-- Preenchido via JS -->
-    </ul>
+    <!-- Especialidades -->
+    <div class="accordion-item">
+      <div id="collapseEspecialidades" class="accordion-collapse collapse" data-bs-parent="#adminAccordion">
+        <div class="accordion-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>💈 Especialidades</h4>
+            <button class="btn btn-success" onclick="abrirModalCriarEspecialidade()">
+              <i class="bi bi-plus-circle"></i> Nova Especialidade
+            </button>
+          </div>
+
+          <ul id="lista-especialidades" class="list-group">
+            <!-- Preenchido via JS -->
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Modal de Criar/Editar Especialidade -->
+<!-- Modal Especialidade -->
 <div class="modal fade" id="modalEspecialidade" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <form class="modal-content" onsubmit="salvarEspecialidade(event)">
@@ -76,6 +107,7 @@
 
 
 <script src="/js/admin.js"></script>
+
 
 <?php
 $content = ob_get_clean();
