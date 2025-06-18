@@ -88,22 +88,25 @@ class AjaxController
         }
     }
 
-    public function buscarEspecialidadesPorBarbeiro($dados)
+    public function buscarEspecialidadesPorBarbeiro($dados = [])
     {
-        $barbeiro_id = $_GET['barbeiro_id'] ?? null;
-        $barbeiro_id = $dados[0];
-        // dd($barbeiro_id);
-
-        if (!$barbeiro_id) {
+        // Verifica se veio via query string (rota 1)
+        if (isset($_GET['barbeiro_id'])) {
+            $barbeiro_id = $_GET['barbeiro_id'];
+        }
+        // Ou via parâmetro da rota (rota 2)
+        elseif (!empty($dados) && is_array($dados)) {
+            $barbeiro_id = $dados[0];
+        } else {
             http_response_code(400);
             echo json_encode(['erro' => 'Barbeiro não informado']);
             exit;
         }
 
-        $dados = $this->barbeiroEspecialidadeModel->getEspecialidadesComValor($barbeiro_id);
-        // dd($dados);
-        echo json_encode($dados);
+        $especialidades = $this->barbeiroEspecialidadeModel->getEspecialidadesComValor($barbeiro_id);
+        echo json_encode($especialidades);
     }
+
 
     public function criarAgendamento()
     {
