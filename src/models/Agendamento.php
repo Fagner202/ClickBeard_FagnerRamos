@@ -47,4 +47,17 @@ class Agendamento
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$agendamentoId]);
     }
+
+    public function buscarPorIdEUsuario($agendamentoId, $usuarioId)
+    {
+        $sql = "SELECT a.*, e.nome as especialidade_nome 
+                FROM agendamentos a
+                LEFT JOIN especialidades e ON a.especialidade_id = e.id
+                WHERE a.id = ? AND a.cliente_id = ?";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$agendamentoId, $usuarioId]);
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

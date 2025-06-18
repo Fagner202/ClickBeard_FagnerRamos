@@ -165,4 +165,24 @@ class AjaxController
         ]);
     }
 
+    public function buscarAgendamento($agendamentoId)
+    {
+        $agendamentoId = $agendamentoId[0];
+        // dd($agendamentoId);
+        require_once __DIR__ . '/../models/Agendamento.php';
+        $usuario = autenticarUsuario();
+        
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+        $agendamento = $model->buscarPorIdEUsuario($agendamentoId, $usuario['id']);
+        
+        if (!$agendamento) {
+            http_response_code(404);
+            echo json_encode(['erro' => 'Agendamento não encontrado ou não pertence ao usuário.']);
+            return;
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode($agendamento);
+    }
+
 }
