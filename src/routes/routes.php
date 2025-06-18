@@ -28,7 +28,7 @@ $routes = [
             $usuario = autenticarUsuario();
             renderView('teste', ['title' => 'Home'], false);
         },
-        '/usuario'     => fn() => $barbeiroController->index(),
+        '/barbeiro'     => fn() => $barbeiroController->index(),
         '/agendamento' => fn() => $agendamentoController->index(),
     ],
 

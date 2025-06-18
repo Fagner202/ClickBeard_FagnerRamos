@@ -33,7 +33,7 @@ class BarbeiroController
             $valores = $especialidadesVinculadas; // Já vem no formato [id => valor]
         }
 
-        renderView('clientes/index', [
+        renderView('barbeiro/index', [
             'title' => "Barbeiros - ClickBeard",
             'barbeiro' => $barbeiro,
             'especialidades' => $especialidades,

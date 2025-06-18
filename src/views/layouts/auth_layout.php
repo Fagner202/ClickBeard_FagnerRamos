@@ -40,7 +40,7 @@ $usuario = $_SESSION['nome'] ?? null;
             </li>
 
             <li class="nav-item">
-                <a class="nav-link <?= ($currentUrl === '/usuario') ? 'active' : '' ?>" href="/usuario">
+                <a class="nav-link <?= ($currentUrl === '/barbeiro') ? 'active' : '' ?>" href="/barbeiro">
                     <i class="bi bi-scissors"></i> Barbeiro
                 </a>
             </li>
