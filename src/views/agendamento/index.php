@@ -1,124 +1,129 @@
-<?php
-session_start();
-require_once __DIR__ . '/../../utils/utils.php';
-
-$usuario = autenticarUsuario();
-
-ob_start();
-?>
-
-<h1>Lista de Barbeiros</h1>
-
-<ul class="list-group">
+<ul>
     <?php foreach ($barbeiros as $barbeiro): ?>
-        <li class="list-group-item">
-            <strong>ID do Cliente:</strong> <?= htmlspecialchars($barbeiro['cliente_id']) ?><br>
-            <strong>Idade:</strong> <?= htmlspecialchars($barbeiro['idade']) ?><br>
-            <strong>Data de Contratação:</strong> <?= htmlspecialchars($barbeiro['data_contratacao']) ?><br>
-            <strong>Status:</strong> <?= htmlspecialchars($barbeiro['status']) ?><br>
+        <li>
+            ID do Cliente: <?= htmlspecialchars($barbeiro['cliente_id']) ?><br>
+            Idade: <?= htmlspecialchars($barbeiro['idade']) ?><br>
+            Data de Contratação: <?= htmlspecialchars($barbeiro['data_contratacao']) ?><br>
+            Status: <?= htmlspecialchars($barbeiro['status']) ?><br>
 
-            <button 
-                class="btn btn-primary mt-2" 
-                data-bs-toggle="modal" 
-                data-bs-target="#modalAgendamento" 
-                onclick="carregarEspecialidades(<?= $barbeiro['cliente_id'] ?>)"
-            >
+            <button class="btn btn-primary mt-2" onclick="abrirModalAgendamento(<?= $barbeiro['cliente_id'] ?>)">
                 Realizar Agendamento
             </button>
         </li>
+        <hr>
     <?php endforeach; ?>
 </ul>
 
-<!-- Modal -->
+<!-- Modal Bootstrap 5.3 -->
 <div class="modal fade" id="modalAgendamento" tabindex="-1" aria-labelledby="modalAgendamentoLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form id="formAgendamento" onsubmit="enviarAgendamento(event)">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalAgendamentoLabel">Agendar com Barbeiro</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="barbeiro_id" name="barbeiro_id">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalAgendamentoLabel">Realizar Agendamento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formAgendamento">
+          <input type="hidden" id="barbeiro_id">
 
           <div class="mb-3">
             <label for="especialidade_id" class="form-label">Especialidade</label>
-            <select class="form-select" id="especialidade_id" name="especialidade_id" required>
+            <select id="especialidade_id" class="form-select" required>
               <option value="">Carregando...</option>
             </select>
           </div>
 
           <div class="mb-3">
             <label for="data_hora" class="form-label">Data e Hora</label>
-            <input type="datetime-local" class="form-control" id="data_hora" name="data_hora" required>
+            <input type="datetime-local" id="data_hora" class="form-control" required>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Confirmar Agendamento</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" onclick="enviarAgendamento()">Confirmar</button>
+      </div>
     </div>
   </div>
 </div>
 
-
-
-<!-- Função JavaScript -->
 <script>
-    function carregarEspecialidades(barbeiroId) {
-        document.getElementById('barbeiro_id').value = barbeiroId;
+function abrirModalAgendamento(barbeiroId) {
+    // Define barbeiro_id no input hidden
+    document.getElementById('barbeiro_id').value = barbeiroId;
 
-        fetch(`/ajaxController.php?action=especialidades&barbeiro_id=${barbeiroId}`)
-            .then(res => res.json())
-            .then(data => {
-                const select = document.getElementById('especialidade_id');
-                select.innerHTML = '';
+    // Carrega especialidades via AJAX
+    fetch('/ajax/especialidades-barbeiro?barbeiro_id=' + barbeiroId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const select = document.getElementById('especialidade_id');
+        select.innerHTML = '';
 
-                if (data.length === 0) {
-                    select.innerHTML = '<option value="">Nenhuma especialidade</option>';
-                    return;
-                }
+        if (data.length === 0) {
+            select.innerHTML = '<option value="">Nenhuma especialidade disponível</option>';
+            return;
+        }
 
-                data.forEach(esp => {
-                    const option = document.createElement('option');
-                    option.value = esp.especialidade_id;
-                    option.textContent = `${esp.nome} - R$ ${parseFloat(esp.valor).toFixed(2)}`;
-                    select.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao carregar especialidades:', error);
-                alert('Erro ao carregar especialidades.');
-            });
-    }
-
-    function enviarAgendamento(event) {
-        event.preventDefault();
-
-        const formData = new FormData(document.getElementById('formAgendamento'));
-
-        fetch('/ajaxController.php?action=agendar', {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.sucesso) {
-                alert('Agendamento realizado com sucesso!');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgendamento'));
-                modal.hide();
-            } else {
-                alert('Erro: ' + data.mensagem);
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao agendar:', error);
-            alert('Erro ao tentar agendar.');
+        data.forEach(esp => {
+            const option = document.createElement('option');
+            option.value = esp.especialidade_id;
+            option.textContent = `${esp.nome} - R$ ${parseFloat(esp.valor).toFixed(2)}`;
+            select.appendChild(option);
         });
-    }
-</script>
+    })
+    .catch(error => {
+        console.error('Erro ao carregar especialidades:', error);
+        alert('Erro ao carregar especialidades.');
+    });
 
+    // Abre o modal
+    const modal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
+    modal.show();
+}
+
+function enviarAgendamento() {
+    const barbeiroId = document.getElementById('barbeiro_id').value;
+    const especialidadeId = document.getElementById('especialidade_id').value;
+    const dataHora = document.getElementById('data_hora').value;
+
+    if (!especialidadeId || !dataHora) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+    }
+
+    fetch('/ajax/criar-agendamento', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            barbeiro_id: barbeiroId,
+            especialidade_id: especialidadeId,
+            data_hora: dataHora
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.sucesso) {
+            alert('Agendamento realizado com sucesso!');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgendamento'));
+            modal.hide();
+            document.getElementById('formAgendamento').reset();
+        } else {
+            alert('Erro: ' + data.mensagem);
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao tentar agendar:', error);
+        alert('Erro ao tentar agendar.');
+    });
+}
+</script>
 
 <?php
 $content = ob_get_clean();

@@ -107,8 +107,10 @@ class AjaxController
         require_once __DIR__ . '/../models/Agendamento.php';
 
         $dados = json_decode(file_get_contents('php://input'), true);
+        $usuario = autenticarUsuario();
+        // dd($usuario);
 
-        $cliente_id = $_SESSION['usuario']['id'] ?? null;
+        $cliente_id = $usuario['id'] ?? null;
         $barbeiro_id = $dados['barbeiro_id'] ?? null;
         $especialidade_id = $dados['especialidade_id'] ?? null;
         $data_hora = $dados['data_hora'] ?? null;
