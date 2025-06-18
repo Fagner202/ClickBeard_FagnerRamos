@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'secure' => false // Altere para true em produção com HTTPS
         ]);
 
-        header('Location: /agendamentos');
+        header('Location: /');
         exit;
     }
 
