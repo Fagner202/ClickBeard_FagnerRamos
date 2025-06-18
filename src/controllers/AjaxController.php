@@ -335,7 +335,6 @@ class AjaxController
 
     public function criarBarbeiro() {
         $dados = json_decode(file_get_contents('php://input'), true);
-        dd($dados);
 
         $cliente_id = $dados['cliente_id'] ?? null;
         $idade = $dados['idade'] ?? null;
@@ -347,10 +346,20 @@ class AjaxController
             return;
         }
 
-        $stmt = $this->pdo->prepare("INSERT INTO barbeiros (cliente_id, idade, data_contratacao) VALUES (?, ?, ?)");
+        $pdo = require __DIR__ . '/../config/database.php';
+
+        // Prepara a query com placeholders (evita SQL Injection)
+        $stmt = $pdo->prepare("INSERT INTO barbeiros (cliente_id, idade, data_contratacao) VALUES (?, ?, ?)");
+
+        // Executa a query com os valores
         $sucesso = $stmt->execute([$cliente_id, $idade, $data]);
 
-        echo json_encode(['sucesso' => $sucesso]);
+        // Verifica se deu certo
+        if ($sucesso) {
+            echo json_encode(["Barbeiro cadastrado com sucesso!" => true]);
+        } else {
+            echo json_encode(["Erro ao cadastrar barbeiro" . implode (", ", $stmt->errorInfo()) => true]);
+        }
     }
 
 }
