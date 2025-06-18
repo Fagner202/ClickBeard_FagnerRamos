@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $token = JWTHandler::gerarToken([
             'id' => $usuario['id'],
             'email' => $usuario['email'],
-            'nome' => $usuario['nome']
+            'nome' => $usuario['nome'],
+            'tipo' => $usuario['tipo'],
         ]);
 
         // Define o token como cookie com 1h de validade

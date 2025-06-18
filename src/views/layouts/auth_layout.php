@@ -3,6 +3,8 @@ $currentUrl = $_SERVER['REQUEST_URI'];
 // dd($currentUrl);
 $_SESSION = autenticarUsuario();
 $usuario = $_SESSION['nome'] ?? null;
+
+// dd($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -44,6 +46,15 @@ $usuario = $_SESSION['nome'] ?? null;
                     <i class="bi bi-scissors"></i> Barbeiro
                 </a>
             </li>
+
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= ($currentUrl === '/administrador') ? 'active' : '' ?>" href="/administrador">
+                        <i class="bi bi-diamond"></i> Administrador
+                    </a>
+                </li>
+            <?php endif; ?>
+
 
             <!-- <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/teste') ? 'active' : '' ?>" href="/teste">
