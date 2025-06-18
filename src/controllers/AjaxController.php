@@ -130,4 +130,39 @@ class AjaxController
         ]);
     }
 
+    public function buscarAgendamentosUsuario()
+    {
+        require_once __DIR__ . '/../models/Agendamento.php';
+        $usuario = autenticarUsuario();
+        
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+        $agendamentos = $model->buscarPorClienteId($usuario['id']);
+        
+        header('Content-Type: application/json');
+        echo json_encode($agendamentos);
+    }
+
+    public function cancelarAgendamento()
+    {
+        require_once __DIR__ . '/../models/Agendamento.php';
+        $dados = json_decode(file_get_contents('php://input'), true);
+        $usuario = autenticarUsuario();
+        
+        $agendamentoId = $dados['agendamento_id'] ?? null;
+        
+        if (!$agendamentoId) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'ID do agendamento não fornecido.']);
+            return;
+        }
+        
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+        $sucesso = $model->cancelar($agendamentoId, $usuario['id']);
+        
+        echo json_encode([
+            'sucesso' => $sucesso,
+            'mensagem' => $sucesso ? 'Agendamento cancelado com sucesso!' : 'Erro ao cancelar agendamento.'
+        ]);
+    }
+
 }
