@@ -8,9 +8,15 @@ ob_start();
 <div class="container mt-5">
   <input type="hidden" class="barbeiro_id_value" value="<?php echo  $usuario['id'] ?>">
 
-  <div class="mb-5 text-center">
-    <h2 class="fw-bold text-primary">Bem-vindo, <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></h2>
-  </div>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h4 class="fw-bold text-primary">Bem-vindo, <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></h4>
+        
+        <?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
+            <button class="btn btn-outline-primary mt-2 mt-md-0" onclick="abrirModalAgendados()">
+            <i class="bi bi-calendar-check"></i> Agendados
+            </button>
+        <?php endif; ?>
+    </div>
 
   <?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
 
@@ -91,6 +97,34 @@ ob_start();
     </div>
   </div>
 </div>
+
+<!-- Modal de Agendados -->
+<div class="modal fade" id="modalAgendados" tabindex="-1" aria-labelledby="modalAgendadosLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAgendadosLabel">Clientes Agendados</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Cliente</th>
+              <th>Serviço</th>
+              <th>Data/Hora</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-agendados">
+            <!-- Conteúdo será inserido via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script src="/js/barbeiro.js"></script>
 

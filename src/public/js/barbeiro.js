@@ -90,3 +90,62 @@ function editarValor(especialidadeId) {
 
     document.getElementById('valor-' + especialidadeId).textContent = novoValor;
 }
+
+function abrirModalAgendados() {
+  fetch('/ajax/agendamentos-barbeiro?barbeiro_id=' + barbeiroId)
+    .then(response => response.json())
+    .then(agendamentos => {
+      const tabela = document.getElementById('tabela-agendados');
+      tabela.innerHTML = '';
+
+      if (agendamentos.length === 0) {
+        tabela.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Nenhum agendamento encontrado.</td></tr>';
+      }
+
+      agendamentos.forEach(item => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${item.cliente_nome}</td>
+          <td>${item.especialidade_nome}</td>
+          <td>${item.data_hora}</td>
+          <td>
+            <button class="btn btn-sm btn-success" onclick="finalizarAtendimento(${item.id})">
+              Finalizar
+            </button>
+          </td>
+        `;
+
+        tabela.appendChild(tr);
+      });
+
+      const modal = new bootstrap.Modal(document.getElementById('modalAgendados'));
+      modal.show();
+    })
+    .catch(error => {
+      console.error('Erro ao buscar agendamentos:', error);
+      alert('Erro ao carregar agendamentos.');
+    });
+}
+
+function finalizarAtendimento(agendamentoId) {
+  if (!confirm('Deseja realmente finalizar este atendimento?')) return;
+
+  fetch('/ajax/finalizar-agendamento', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ agendamento_id: agendamentoId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.sucesso) {
+      alert('Atendimento finalizado.');
+      abrirModalAgendados(); // recarrega
+    } else {
+      alert('Erro: ' + data.mensagem);
+    }
+  })
+  .catch(error => {
+    console.error('Erro ao finalizar atendimento:', error);
+  });
+}

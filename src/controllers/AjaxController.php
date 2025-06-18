@@ -238,4 +238,44 @@ class AjaxController
         ]);
     }
 
+    public function buscarAgendamentosPorBarbeiro($dados)
+    {
+        require_once __DIR__ . '/../models/Agendamento.php';
+        $barbeiro_id = $dados['barbeiro_id'] ?? null;
+
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+
+        if (!$barbeiro_id) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'ID do barbeiro não informado']);
+            exit;
+        }
+
+        $agendamentos = $model->buscarPorBarbeiro($barbeiro_id);
+
+        echo json_encode($agendamentos);
+    }
+
+    public function finalizarAgendamento()
+    {
+        require_once __DIR__ . '/../models/Agendamento.php';
+        $input = json_decode(file_get_contents('php://input'), true);
+        $agendamento_id = $input['agendamento_id'] ?? null;
+
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+
+        if (!$agendamento_id) {
+            http_response_code(400);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'ID do agendamento não informado.']);
+            return;
+        }
+
+        $sucesso = $this->$model->finalizar($agendamento_id);
+
+        echo json_encode([
+            'sucesso' => $sucesso,
+            'mensagem' => $sucesso ? 'Agendamento finalizado.' : 'Erro ao finalizar.'
+        ]);
+    }
+
 }

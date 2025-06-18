@@ -40,16 +40,19 @@ $routes = [
     ],
 
     'ANY' => [
-        '/ajax/vincular-especialidade'    => fn() => $ajaxController->vincularEspecialidade(),
-        '/ajax/desvincular-especialidade' => fn() => $ajaxController->desvincularEspecialidade(),
-        '/ajax/atualizarValor'            => fn() => $ajaxController->atualizarValor(),
-        '/ajax/especialidades-barbeiro'   => fn() => $ajaxController->buscarEspecialidadesPorBarbeiro(),
-        '/ajax/criar-agendamento'         => fn() => $ajaxController->criarAgendamento(),
-        '/ajax/meus-agendamentos'         => fn() => $ajaxController->buscarAgendamentosUsuario(),
-        '/ajax/buscar-agendamento/(\d+)'  => fn($matches) => $ajaxController->buscarAgendamento($matches),
-        '/ajax/barbeiros-disponiveis'     => fn() => $ajaxController->listarBarbeirosDisponiveis(),
+        '/ajax/vincular-especialidade'        => fn() => $ajaxController->vincularEspecialidade(),
+        '/ajax/desvincular-especialidade'     => fn() => $ajaxController->desvincularEspecialidade(),
+        '/ajax/atualizarValor'                => fn() => $ajaxController->atualizarValor(),
+        '/ajax/especialidades-barbeiro'       => fn() => $ajaxController->buscarEspecialidadesPorBarbeiro(),
+        '/ajax/criar-agendamento'             => fn() => $ajaxController->criarAgendamento(),
+        '/ajax/meus-agendamentos'             => fn() => $ajaxController->buscarAgendamentosUsuario(),
+        '/ajax/buscar-agendamento/(\d+)'      => fn($matches) => $ajaxController->buscarAgendamento($matches),
+        '/ajax/barbeiros-disponiveis'         => fn() => $ajaxController->listarBarbeirosDisponiveis(),
         '/ajax/especialidades-barbeiro/(\d+)' => fn($matches) => $ajaxController->buscarEspecialidadesPorBarbeiro($matches),
-        '/ajax/atualizar-agendamento'     => fn() => $ajaxController->atualizarAgendamento(),
+        '/ajax/atualizar-agendamento'         => fn() => $ajaxController->atualizarAgendamento(),
+        '/ajax/agendamentos-barbeiro'         => fn() => $ajaxController->buscarAgendamentosPorBarbeiro($_GET),
+        '/ajax/finalizar-agendamento'         => fn() => $ajaxController->finalizarAgendamento(),
+
     ]
 ];
 

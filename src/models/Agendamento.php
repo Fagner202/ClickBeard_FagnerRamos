@@ -79,4 +79,37 @@ class Agendamento
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$dataHora, $barbeiroId, $especialidadeId, $agendamentoId]);
     }
+
+    public function buscarPorBarbeiro($barbeiro_id)
+    {
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                a.id,
+                c.nome AS cliente_nome,
+                e.nome AS especialidade_nome,
+                a.data_hora
+            FROM agendamentos a
+            INNER JOIN clientes c ON c.id = a.cliente_id
+            INNER JOIN especialidades e ON e.id = a.especialidade_id
+            WHERE a.barbeiro_id = :barbeiro_id
+            AND a.status = 'aberto'
+            AND a.cancelado = FALSE
+            ORDER BY a.data_hora ASC
+        ");
+        $stmt->execute(['barbeiro_id' => $barbeiro_id]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function finalizar($agendamento_id)
+    {
+        $stmt = $this->pdo->prepare("
+            UPDATE agendamentos
+            SET status = 'finalizado'
+            WHERE id = :id
+        ");
+        return $stmt->execute(['id' => $agendamento_id]);
+    }
+
 }
