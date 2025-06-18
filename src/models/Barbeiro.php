@@ -82,7 +82,7 @@ class Barbeiro
 
     public function getAll()
     {
-        $stmt = $this->pdo->query("SELECT * FROM barbeiros");
+        $stmt = $this->pdo->query("SELECT * FROM barbeiros LEFT JOIN clientes c ON c.id = barbeiros.cliente_id");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

@@ -4,6 +4,8 @@ require_once __DIR__ . '/../../utils/utils.php';
 
 $usuario = autenticarUsuario();
 
+// dd($barbeiros);
+
 ob_start();
 ?>
 
@@ -27,7 +29,7 @@ ob_start();
       <div class="col">
         <div class="card shadow-sm h-100">
           <div class="card-body">
-            <h5 class="card-title">Barbeiro ID <?= htmlspecialchars($barbeiro['cliente_id']) ?></h5>
+            <h5 class="card-title">Barbeiro ID <?= htmlspecialchars($barbeiro['nome']) ?></h5>
             <p class="card-text mb-1"><strong>Idade:</strong> <?= htmlspecialchars($barbeiro['idade']) ?></p>
             <p class="card-text mb-1"><strong>Data de Contratação:</strong> <?= htmlspecialchars($barbeiro['data_contratacao']) ?></p>
             <p class="card-text mb-3"><strong>Status:</strong> <?= htmlspecialchars($barbeiro['status']) ?></p>
