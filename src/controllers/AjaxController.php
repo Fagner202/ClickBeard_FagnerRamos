@@ -270,7 +270,7 @@ class AjaxController
             return;
         }
 
-        $sucesso = $this->$model->finalizar($agendamento_id);
+        $sucesso = $model->finalizar($agendamento_id);
 
         echo json_encode([
             'sucesso' => $sucesso,
