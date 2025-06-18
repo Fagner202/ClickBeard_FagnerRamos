@@ -6,11 +6,13 @@ require_once __DIR__ . '/../helpers.php';
 require_once __DIR__ . '/../controllers/BarbeiroController.php';
 require_once __DIR__ . '/../controllers/AjaxController.php';
 require_once __DIR__ . '/../controllers/AgendamentoController.php';
+require_once __DIR__ . '/../controllers/AdminController.php';
 
 $pdo = require_once __DIR__ . '/../config/database.php';
 $barbeiroController    = new BarbeiroController($pdo);
 $ajaxController        = new AjaxController($pdo);
 $agendamentoController = new AgendamentoController($pdo);
+$adminController       = new AdminController($pdo);
 
 // Define rotas como: ['GET']['/caminho'] => callable
 $routes = [
@@ -28,8 +30,9 @@ $routes = [
             $usuario = autenticarUsuario();
             renderView('teste', ['title' => 'Home'], false);
         },
-        '/barbeiro'     => fn() => $barbeiroController->index(),
-        '/agendamento' => fn() => $agendamentoController->index(),
+        '/barbeiro'      => fn() => $barbeiroController->index(),
+        '/agendamento'   => fn() => $agendamentoController->index(),
+        '/administrador' => fn() => $adminController->index(),
     ],
 
     'POST' => [
