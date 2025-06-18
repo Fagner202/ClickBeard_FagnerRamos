@@ -1,3 +1,14 @@
+<?php
+// session_start();
+require_once __DIR__ . '/../../utils/utils.php';
+
+$usuario = autenticarUsuario();
+
+// dd($clientes);
+
+ob_start();
+?>
+
 <div class="container py-4">
   <h2 class="fw-bold mb-4">Painel do Administrador</h2>
 
@@ -119,7 +130,7 @@
           <label for="cliente_id" class="form-label">Cliente</label>
           <select class="form-select" id="cliente_id" required onchange="preencherNomeCliente()">
             <option value="">Selecione um cliente</option>
-            <?php foreach ($clientesNaoBarbeiros as $cliente): ?>
+            <?php foreach ($clientes as $cliente): ?>
               <option value="<?= $cliente['id'] ?>" data-nome="<?= htmlspecialchars($cliente['nome']) ?>">
                 <?= htmlspecialchars($cliente['nome']) ?> (<?= htmlspecialchars($cliente['email']) ?>)
               </option>

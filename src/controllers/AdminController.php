@@ -22,16 +22,28 @@ class AdminController {
     public function index()
     {
         $_SESSION = autenticarUsuario();
-        // dd($_SESSION);
-        // Só admins podem acessar
         session_start();
+        
         if (!isset($_SESSION) || $_SESSION['tipo'] !== 'admin') {
             http_response_code(403);
             echo 'Acesso negado';
             exit;
         }
 
+        // Busca os barbeiros (já existente)
         $barbeiros = $this->barbeiroModel->listarTodosComEspecialidades();
-        renderView('administrador/index', ['barbeiros' => $barbeiros], false);
+        
+        // **Consulta direta dos clientes (usando PDO)**
+        $pdo = require __DIR__ . '/../config/database.php';
+        $stmt = $pdo->query("SELECT * FROM clientes");
+        $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // dd($clientes);
+
+        // Passa os dados para a view
+        renderView('administrador/index', [
+            'barbeiros' => $barbeiros,
+            'clientes' => $clientes // Adiciona os clientes aqui
+        ], false);
     }
 }
