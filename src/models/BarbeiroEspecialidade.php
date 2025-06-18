@@ -38,4 +38,15 @@ class BarbeiroEspecialidade
         return $valores;
     }
 
+    public function getEspecialidadesComValor($barbeiroId)
+    {
+        $sql = "SELECT e.id AS especialidade_id, e.nome, be.valor
+                FROM barbeiro_especialidade be
+                JOIN especialidades e ON e.id = be.especialidade_id
+                WHERE be.barbeiro_id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$barbeiroId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

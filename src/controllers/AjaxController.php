@@ -87,4 +87,45 @@ class AjaxController
             echo json_encode(['sucesso' => false, 'mensagem' => 'Erro: ' . $e->getMessage()]);
         }
     }
+
+    public function buscarEspecialidadesPorBarbeiro()
+    {
+        $barbeiro_id = $_GET['barbeiro_id'] ?? null;
+
+        if (!$barbeiro_id) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Barbeiro não informado']);
+            exit;
+        }
+
+        $dados = $this->barbeiroEspecialidadeModel->getEspecialidadesComValor($barbeiro_id);
+        echo json_encode($dados);
+    }
+
+    public function criarAgendamento()
+    {
+        require_once __DIR__ . '/../models/Agendamento.php';
+
+        $dados = json_decode(file_get_contents('php://input'), true);
+
+        $cliente_id = $_SESSION['usuario']['id'] ?? null;
+        $barbeiro_id = $dados['barbeiro_id'] ?? null;
+        $especialidade_id = $dados['especialidade_id'] ?? null;
+        $data_hora = $dados['data_hora'] ?? null;
+
+        if (!$cliente_id || !$barbeiro_id || !$especialidade_id || !$data_hora) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Dados incompletos.']);
+            return;
+        }
+
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+        $sucesso = $model->criar($cliente_id, $barbeiro_id, $especialidade_id, $data_hora);
+
+        echo json_encode([
+            'sucesso' => $sucesso,
+            'mensagem' => $sucesso ? 'Agendamento realizado com sucesso!' : 'Erro ao criar agendamento.'
+        ]);
+    }
+
 }

@@ -43,6 +43,8 @@ $routes = [
         '/ajax/vincular-especialidade' => fn() => $ajaxController->vincularEspecialidade(),
         '/ajax/desvincular-especialidade' => fn() => $ajaxController->desvincularEspecialidade(),
         '/ajax/atualizarValor' => fn() => $ajaxController->atualizarValor(),
+        '/ajax/especialidades-barbeiro' => fn() => $ajaxController->buscarEspecialidadesPorBarbeiro(),
+        '/ajax/criar-agendamento' => fn() => $ajaxController->criarAgendamento(),
     ]
 ];
 
