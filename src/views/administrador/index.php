@@ -1,27 +1,53 @@
-<h2>Lista de Barbeiros</h2>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Painel do Administrador</h2>
+    <span class="badge bg-dark fs-6">Gerencie barbeiros e especialidades</span>
+  </div>
 
-<?php foreach ($barbeiros as $barbeiro): ?>
-    <div>
-        <h4><?= htmlspecialchars($barbeiro['nome']) ?></h4>
-        <p>Idade: <?= htmlspecialchars($barbeiro['idade']) ?></p>
-        <p>Data de Contratação: <?= htmlspecialchars($barbeiro['data_contratacao']) ?></p>
-        <p>Especialidades: <?= !empty($barbeiro['especialidades']) 
-            ? implode(', ', array_map('htmlspecialchars', $barbeiro['especialidades'])) 
-            : 'Nenhuma' ?>
-        </p>
-        <hr>
+  <!-- Seção de Barbeiros -->
+  <div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4><i class="bi bi-scissors"></i> Barbeiros</h4>
     </div>
-<?php endforeach; ?>
 
-<h2>Especialidades</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <?php foreach ($barbeiros as $barbeiro): ?>
+        <div class="col">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title"><?= htmlspecialchars($barbeiro['nome']) ?></h5>
+              <p class="card-text mb-1"><strong>Idade:</strong> <?= htmlspecialchars($barbeiro['idade']) ?></p>
+              <p class="card-text mb-1"><strong>Contratado em:</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($barbeiro['data_contratacao']))) ?></p>
+              <p class="card-text mb-2"><strong>Especialidades:</strong><br>
+                <?= !empty($barbeiro['especialidades']) 
+                  ? implode('<br>', array_map('htmlspecialchars', $barbeiro['especialidades'])) 
+                  : '<span class="text-muted">Nenhuma cadastrada</span>' ?>
+              </p>
+              <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-sm btn-outline-primary">Editar</button>
+                <button class="btn btn-sm btn-outline-danger">Excluir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
 
-<!-- Botão para abrir o modal de criação -->
-<button class="btn btn-success mb-3" onclick="abrirModalCriarEspecialidade()">+ Nova Especialidade</button>
+  <!-- Seção de Especialidades -->
+  <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4><i class="bi bi-star"></i> Especialidades</h4>
+      <button class="btn btn-success" onclick="abrirModalCriarEspecialidade()">
+        <i class="bi bi-plus-circle"></i> Nova Especialidade
+      </button>
+    </div>
 
-<!-- Lista de especialidades -->
-<ul id="lista-especialidades" class="list-group mb-5">
-  <!-- Será preenchido via JavaScript -->
-</ul>
+    <ul id="lista-especialidades" class="list-group">
+      <!-- Preenchido via JS -->
+    </ul>
+  </div>
+</div>
 
 <!-- Modal de Criar/Editar Especialidade -->
 <div class="modal fade" id="modalEspecialidade" tabindex="-1" aria-hidden="true">
@@ -45,6 +71,9 @@
     </form>
   </div>
 </div>
+
+<script src="/js/admin.js"></script>
+
 
 <script src="/js/admin.js"></script>
 
