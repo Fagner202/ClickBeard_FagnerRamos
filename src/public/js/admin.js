@@ -78,3 +78,53 @@ function excluirEspecialidade(id) {
     }
   });
 }
+
+function abrirModalCriarBarbeiro() {
+  document.getElementById('titulo-modal-barbeiro').textContent = 'Cadastrar Barbeiro';
+  document.getElementById('barbeiro_cliente_id').value = '';
+  document.getElementById('cliente_id').value = '';
+  document.getElementById('nome_cliente').value = '';
+  document.getElementById('idade').value = '';
+  document.getElementById('data_contratacao').value = new Date().toISOString().split('T')[0];
+
+  const modal = new bootstrap.Modal(document.getElementById('modalBarbeiro'));
+  modal.show();
+}
+
+function preencherNomeCliente() {
+  const select = document.getElementById('cliente_id');
+  const selectedOption = select.options[select.selectedIndex];
+  const nome = selectedOption.getAttribute('data-nome');
+  document.getElementById('nome_cliente').value = nome || '';
+}
+
+function salvarBarbeiro(event) {
+  event.preventDefault();
+
+  const clienteId = document.getElementById('cliente_id').value;
+  const idade = document.getElementById('idade').value;
+  const dataContratacao = document.getElementById('data_contratacao').value;
+
+  fetch('/ajax/barbeiros/criar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      cliente_id: clienteId,
+      idade: idade,
+      data_contratacao: dataContratacao
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.sucesso) {
+      alert('Barbeiro cadastrado com sucesso!');
+      location.reload();
+    } else {
+      alert('Erro ao cadastrar barbeiro: ' + data.mensagem);
+    }
+  })
+  .catch(err => {
+    console.error('Erro na requisição:', err);
+    alert('Erro na requisição.');
+  });
+}

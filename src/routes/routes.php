@@ -56,10 +56,11 @@ $routes = [
         '/ajax/atualizar-agendamento'         => fn() => $ajaxController->atualizarAgendamento(),
         '/ajax/agendamentos-barbeiro'         => fn() => $ajaxController->buscarAgendamentosPorBarbeiro($_GET),
         '/ajax/finalizar-agendamento'         => fn() => $ajaxController->finalizarAgendamento(),
-        '/ajax/especialidades/listar'   => fn() => $ajaxController->listarEspecialidades(),
-        '/ajax/especialidades/criar'    => fn() => $ajaxController->criarEspecialidade(),
-        '/ajax/especialidades/editar'   => fn() => $ajaxController->editarEspecialidade(),
-        '/ajax/especialidades/excluir'  => fn() => $ajaxController->excluirEspecialidade(),
+        '/ajax/especialidades/listar'         => fn() => $ajaxController->listarEspecialidades(),
+        '/ajax/especialidades/criar'          => fn() => $ajaxController->criarEspecialidade(),
+        '/ajax/especialidades/editar'         => fn() => $ajaxController->editarEspecialidade(),
+        '/ajax/especialidades/excluir'        => fn() => $ajaxController->excluirEspecialidade(),
+        '/ajax/barbeiros/criar'               => fn() => $ajaxController->criarBarbeiro(),
 
     ]
 ];

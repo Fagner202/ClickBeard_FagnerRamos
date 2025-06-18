@@ -20,7 +20,7 @@
         <div class="accordion-body">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>👨‍🔧 Barbeiros Cadastrados</h4>
-            <button class="btn btn-success">
+            <button class="btn btn-success" onclick="abrirModalCriarBarbeiro()">
               <i class="bi bi-plus-circle"></i> Novo Barbeiro
             </button>
           </div>
@@ -103,8 +103,54 @@
   </div>
 </div>
 
-<script src="/js/admin.js"></script>
+<!-- Modal Criar/Editar Barbeiro -->
+<div class="modal fade" id="modalBarbeiro" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" onsubmit="salvarBarbeiro(event)">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titulo-modal-barbeiro">Cadastrar Barbeiro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="barbeiro_cliente_id">
 
+        <!-- Selecionar Cliente Existente -->
+        <div class="mb-3">
+          <label for="cliente_id" class="form-label">Cliente</label>
+          <select class="form-select" id="cliente_id" required onchange="preencherNomeCliente()">
+            <option value="">Selecione um cliente</option>
+            <?php foreach ($clientesNaoBarbeiros as $cliente): ?>
+              <option value="<?= $cliente['id'] ?>" data-nome="<?= htmlspecialchars($cliente['nome']) ?>">
+                <?= htmlspecialchars($cliente['nome']) ?> (<?= htmlspecialchars($cliente['email']) ?>)
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <!-- Nome do cliente (preenchido automaticamente) -->
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-control" id="nome_cliente" disabled>
+        </div>
+
+        <div class="mb-3">
+          <label for="idade" class="form-label">Idade</label>
+          <input type="number" class="form-control" id="idade" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="data_contratacao" class="form-label">Data de Contratação</label>
+          <input type="date" class="form-control" id="data_contratacao" required value="<?= date('Y-m-d') ?>">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script src="/js/admin.js"></script>
 

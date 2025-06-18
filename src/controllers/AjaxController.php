@@ -333,4 +333,24 @@ class AjaxController
         echo json_encode(['sucesso' => true]);
     }
 
+    public function criarBarbeiro() {
+        $dados = json_decode(file_get_contents('php://input'), true);
+        dd($dados);
+
+        $cliente_id = $dados['cliente_id'] ?? null;
+        $idade = $dados['idade'] ?? null;
+        $data = $dados['data_contratacao'] ?? null;
+
+        if (!$cliente_id || !$idade || !$data) {
+            http_response_code(400);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Dados incompletos']);
+            return;
+        }
+
+        $stmt = $this->pdo->prepare("INSERT INTO barbeiros (cliente_id, idade, data_contratacao) VALUES (?, ?, ?)");
+        $sucesso = $stmt->execute([$cliente_id, $idade, $data]);
+
+        echo json_encode(['sucesso' => $sucesso]);
+    }
+
 }
