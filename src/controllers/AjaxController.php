@@ -17,6 +17,11 @@ class AjaxController
         $this->barbeiroEspecialidadeModel = new BarbeiroEspecialidade($pdo);
     }
 
+    /**
+     * Vincula uma especialidade a um barbeiro com um valor específico.
+     * Espera receber JSON com barbeiro_id, especialidade_id e valor.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function vincularEspecialidade()
     {
         // Lê os dados JSON enviados pelo JavaScript
@@ -41,7 +46,11 @@ class AjaxController
         ]);
     }
 
-
+    /**
+     * Remove o vínculo entre um barbeiro e uma especialidade.
+     * Espera receber JSON com barbeiro_id e especialidade_id.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function desvincularEspecialidade()
     {
         $dados = json_decode(file_get_contents('php://input'), true);
@@ -65,6 +74,11 @@ class AjaxController
         ]);
     }
 
+    /**
+     * Atualiza o valor de uma especialidade vinculada ao barbeiro autenticado.
+     * Espera receber JSON com especialidade_id e novo_valor.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function atualizarValor()
     {
         $pdo = require __DIR__ . '/../config/database.php';
@@ -91,6 +105,13 @@ class AjaxController
         }
     }
 
+    /**
+     * Busca as especialidades vinculadas a um barbeiro.
+     * Pode receber o barbeiro_id via query string ou parâmetro.
+     * Retorna JSON com as especialidades.
+     *
+     * @param array $dados Parâmetros da rota (opcional)
+     */
     public function buscarEspecialidadesPorBarbeiro($dados = [])
     {
         // Verifica se veio via query string (rota 1)
@@ -110,7 +131,11 @@ class AjaxController
         echo json_encode($especialidades);
     }
 
-
+    /**
+     * Cria um novo agendamento para o usuário autenticado.
+     * Espera receber JSON com barbeiro_id, especialidade_id e data_hora.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function criarAgendamento()
     {
         require_once __DIR__ . '/../models/Agendamento.php';
@@ -139,6 +164,10 @@ class AjaxController
         ]);
     }
 
+    /**
+     * Busca todos os agendamentos do usuário autenticado.
+     * Retorna JSON com a lista de agendamentos.
+     */
     public function buscarAgendamentosUsuario()
     {
         require_once __DIR__ . '/../models/Agendamento.php';
@@ -151,6 +180,11 @@ class AjaxController
         echo json_encode($agendamentos);
     }
 
+    /**
+     * Cancela um agendamento do usuário autenticado.
+     * Espera receber JSON com agendamento_id.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function cancelarAgendamento()
     {
         require_once __DIR__ . '/../models/Agendamento.php';
@@ -174,6 +208,12 @@ class AjaxController
         ]);
     }
 
+    /**
+     * Busca um agendamento específico do usuário autenticado.
+     * Retorna JSON com os dados do agendamento ou erro.
+     *
+     * @param array $agendamentoId Parâmetro da rota (id do agendamento)
+     */
     public function buscarAgendamento($agendamentoId)
     {
         $agendamentoId = $agendamentoId[0];
@@ -194,6 +234,10 @@ class AjaxController
         echo json_encode($agendamento);
     }
 
+    /**
+     * Lista todos os barbeiros ativos disponíveis.
+     * Retorna JSON com a lista de barbeiros.
+     */
     public function listarBarbeirosDisponiveis()
     {
         require_once __DIR__ . '/../models/Barbeiro.php';
@@ -206,6 +250,11 @@ class AjaxController
         echo json_encode($barbeiros);
     }
 
+    /**
+     * Atualiza um agendamento do usuário autenticado.
+     * Espera receber JSON com agendamento_id, data_hora, barbeiro_id e especialidade_id.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function atualizarAgendamento()
     {
         require_once __DIR__ . '/../models/Agendamento.php';
@@ -241,6 +290,13 @@ class AjaxController
         ]);
     }
 
+    /**
+     * Busca todos os agendamentos de um barbeiro específico.
+     * Espera receber barbeiro_id no array de dados.
+     * Retorna JSON com a lista de agendamentos.
+     *
+     * @param array $dados Parâmetros com barbeiro_id
+     */
     public function buscarAgendamentosPorBarbeiro($dados)
     {
         require_once __DIR__ . '/../models/Agendamento.php';
@@ -259,6 +315,11 @@ class AjaxController
         echo json_encode($agendamentos);
     }
 
+    /**
+     * Finaliza um agendamento.
+     * Espera receber JSON com agendamento_id.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function finalizarAgendamento()
     {
         require_once __DIR__ . '/../models/Agendamento.php';
@@ -281,12 +342,21 @@ class AjaxController
         ]);
     }
 
+    /**
+     * Lista todas as especialidades cadastradas.
+     * Retorna JSON com a lista de especialidades.
+     */
     public function listarEspecialidades()
     {
         $especialidades = $this->especialidadeModel->getAllEspecialidade();
         echo json_encode($especialidades);
     }
 
+    /**
+     * Cria uma nova especialidade.
+     * Espera receber JSON com nome.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function criarEspecialidade()
     {
         $dados = json_decode(file_get_contents('php://input'), true);
@@ -302,6 +372,11 @@ class AjaxController
         echo json_encode(['sucesso' => true]);
     }
 
+    /**
+     * Edita uma especialidade existente.
+     * Espera receber JSON com id e nome.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function editarEspecialidade()
     {
         $dados = json_decode(file_get_contents('php://input'), true);
@@ -318,6 +393,11 @@ class AjaxController
         echo json_encode(['sucesso' => true]);
     }
 
+    /**
+     * Exclui uma especialidade.
+     * Espera receber JSON com id.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function excluirEspecialidade()
     {
         $dados = json_decode(file_get_contents('php://input'), true);
@@ -333,6 +413,11 @@ class AjaxController
         echo json_encode(['sucesso' => true]);
     }
 
+    /**
+     * Cria um novo barbeiro.
+     * Espera receber JSON com cliente_id, idade e data_contratacao.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function criarBarbeiro() {
         $dados = json_decode(file_get_contents('php://input'), true);
 
@@ -363,6 +448,11 @@ class AjaxController
         }
     }
 
+    /**
+     * Edita os dados de um barbeiro existente.
+     * Espera receber JSON com cliente_id, idade e data_contratacao.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function editarBarbeiro() {
         $dados = json_decode(file_get_contents('php://input'), true);
 
@@ -384,6 +474,11 @@ class AjaxController
         echo json_encode(['sucesso' => $sucesso]);
     }
 
+    /**
+     * Exclui um barbeiro.
+     * Espera receber JSON com cliente_id.
+     * Retorna JSON com sucesso ou erro.
+     */
     public function excluirBarbeiro() {
         $dados = json_decode(file_get_contents('php://input'), true);
         $cliente_id = $dados['cliente_id'] ?? null;

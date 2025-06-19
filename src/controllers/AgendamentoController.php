@@ -21,6 +21,24 @@ class AgendamentoController {
         $this->barbeiroEspecialidadeModel = new BarbeiroEspecialidade($pdo);
     }
 
+    /**
+     * Exibe a página de agendamento com a lista de barbeiros disponíveis.
+     * 
+     * ### Descrição:
+     * - Obtém todos os barbeiros cadastrados no sistema.
+     * - Renderiza a view 'agendamento/index' com os dados necessários.
+     * 
+     * ### Dados enviados para a view:
+     * - `title` (string): Título da página ("Agendamentos").
+     * - `barbeiros` (array): Lista de barbeiros retornados pelo model.
+     * 
+     * @return void
+     * 
+     * @uses BarbeiroModel::getAll() Para obter a lista completa de barbeiros.
+     * @uses renderView() Para renderizar a view com os dados.
+     * 
+     * @throws \PDOException Se houver erro ao consultar o banco de dados.
+     */
     public function index() {
         $barbeiros = $this->barbeiroModel->getAll();
         // dd($barbeiros);
