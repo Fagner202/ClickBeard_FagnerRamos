@@ -60,12 +60,12 @@ function enviarAgendamento() {
     .then(res => res.json())
     .then(data => {
         if (data.sucesso) {
-            alert('Agendamento realizado com sucesso!');
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgendamento'));
-            modal.hide();
-            document.getElementById('formAgendamento').reset();
+          alert('Agendamento realizado com sucesso!');
+          const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgendamento'));
+          modal.hide();
+          document.getElementById('formAgendamento').reset();
         } else {
-            alert('Erro: ' + data.mensagem);
+          alert('Erro: ' + data.erro);
         }
     })
     .catch(error => {

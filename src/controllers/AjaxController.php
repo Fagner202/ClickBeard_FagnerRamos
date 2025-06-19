@@ -142,7 +142,6 @@ class AjaxController
 
         $dados = json_decode(file_get_contents('php://input'), true);
         $usuario = autenticarUsuario();
-        // dd($usuario);
 
         $cliente_id = $usuario['id'] ?? null;
         $barbeiro_id = $dados['barbeiro_id'] ?? null;
@@ -155,6 +154,16 @@ class AjaxController
             return;
         }
 
+        // Validação do horário de funcionamento (08:00 às 18:00)
+        $hora = date('H:i', strtotime($data_hora));
+        if ($hora < '08:00' || $hora >= '18:00') {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Horário fora do funcionamento da barbearia (08h às 18h).']);
+            return;
+        }
+
+        dd('Horario correto');
+
         $model = new Agendamento(require __DIR__ . '/../config/database.php');
         $sucesso = $model->criar($cliente_id, $barbeiro_id, $especialidade_id, $data_hora);
 
@@ -163,6 +172,7 @@ class AjaxController
             'mensagem' => $sucesso ? 'Agendamento realizado com sucesso!' : 'Erro ao criar agendamento.'
         ]);
     }
+
 
     /**
      * Busca todos os agendamentos do usuário autenticado.
