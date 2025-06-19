@@ -4,7 +4,7 @@ $currentUrl = $_SERVER['REQUEST_URI'];
 $_SESSION = autenticarUsuario();
 $usuario = $_SESSION['nome'] ?? null;
 
-// dd($_SESSION);
+// dd(eBarbeiro());
 ?>
 
 <!DOCTYPE html>
@@ -41,11 +41,13 @@ $usuario = $_SESSION['nome'] ?? null;
                 </a>
             </li>
 
+            <?php if (eBarbeiro() || ($_SESSION['tipo'] ?? null) === 'admin'): ?>
             <li class="nav-item">
                 <a class="nav-link <?= ($currentUrl === '/barbeiro') ? 'active' : '' ?>" href="/barbeiro">
-                    <i class="bi bi-scissors"></i> Barbeiro
+                <i class="bi bi-scissors"></i> Barbeiro
                 </a>
             </li>
+            <?php endif; ?>
 
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
                 <li class="nav-item">

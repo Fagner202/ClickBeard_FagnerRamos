@@ -34,3 +34,22 @@ function renderView(string $view, array $data = [], bool $auth = true): void
 
     require $layoutPath;
 }
+
+function eBarbeiro(): bool
+{
+
+    $cliente = autenticarUsuario();
+    // dd($cliente);
+    $clienteId = $cliente['id'];
+    // dd($clienteId);
+
+    // Conexão com o banco
+    $pdo = require __DIR__ . '/config/database.php';
+
+    // Verifica se existe um barbeiro com esse cliente_id
+    $stmt = $pdo->prepare("SELECT 1 FROM barbeiros WHERE cliente_id = :cliente_id LIMIT 1");
+    $stmt->execute(['cliente_id' => $clienteId]);
+
+    return $stmt->fetchColumn() !== false;
+}
+
