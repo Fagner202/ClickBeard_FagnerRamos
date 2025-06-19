@@ -2,33 +2,26 @@
 session_start();
 require_once __DIR__ . '/../../utils/utils.php';
 $usuario = autenticarUsuario();
+
+// dd($especialidades);
+// dd($barbeiro);
 ob_start();
 ?>
 
 <div class="container mt-5">
-  <input type="hidden" class="barbeiro_id_value" value="<?php echo  $usuario['id'] ?>">
+  <input type="hidden" class="barbeiro_id_value" value="<?= $usuario['id'] ?>">
 
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-        <h4 class="fw-bold text-primary">Bem-vindo, <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></h4>
-        
-        <?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
-            <button class="btn btn-outline-primary mt-2 mt-md-0" onclick="abrirModalAgendados()">
-            <i class="bi bi-calendar-check"></i> Agendados
-            </button>
-        <?php endif; ?>
-    </div>
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h4 class="fw-bold text-primary">Bem-vindo, <?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></h4>
+    
+    <?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
+      <button class="btn btn-outline-primary mt-2 mt-md-0" onclick="abrirModalAgendados()">
+        <i class="bi bi-calendar-check"></i> Agendados
+      </button>
+    <?php endif; ?>
+  </div>
 
   <?php if (isset($barbeiro) && is_array($barbeiro) && $barbeiro['status'] === 'ativo'): ?>
-
-    <div class="text-end mb-4">
-      <form action="/barbeiros/inativar" method="POST">
-        <input type="hidden" name="cliente_id" value="<?= $usuario['id'] ?>">
-        <button type="submit" class="btn btn-outline-danger rounded-pill">
-          <i class="bi bi-x-circle"></i> Deixar de ser barbeiro
-        </button>
-      </form>
-    </div>
-
     <div class="mb-4">
       <h4 class="mb-3">Suas Especialidades</h4>
       <?php if (!empty($especialidades)): ?>
@@ -59,43 +52,15 @@ ob_start();
         </ul>
       <?php else: ?>
         <div class="alert alert-warning mt-3">
-          Você ainda não tem especialidades cadastradas.
+          Não há especialidades disponíveis no momento.
         </div>
       <?php endif; ?>
     </div>
-
   <?php else: ?>
-    <div class="text-center mb-5">
-      <h4 class="fw-bold">Torne-se um barbeiro parceiro</h4>
-      <p class="text-muted">Faça parte do nosso time e aumente sua visibilidade com clientes em sua região. Tenha acesso a uma plataforma intuitiva para gerenciar seus serviços, agendamentos e especialidades.</p>
-      <button class="btn btn-success rounded-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalInscricaoBarbeiro">
-        <i class="bi bi-person-plus"></i> Quero me inscrever como barbeiro
-      </button>
+    <div class="alert alert-info text-center mt-5">
+      Você ainda não está cadastrado como barbeiro. Acesse o administrador para mais informações.
     </div>
   <?php endif; ?>
-</div>
-
-<!-- Modal de Inscrição -->
-<div class="modal fade" id="modalInscricaoBarbeiro" tabindex="-1" aria-labelledby="modalInscricaoBarbeiroLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content rounded-4">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="modalInscricaoBarbeiroLabel">Inscrição como Barbeiro</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="/barbeiros/criar" method="POST">
-        <div class="modal-body">
-          <input type="hidden" name="cliente_id" value="<?= $usuario['id'] ?>">
-          <input type="hidden" name="idade" value="30">
-          <input type="hidden" name="data_contratacao" value="<?= date('Y-m-d') ?>">
-          <p>Ao se cadastrar, você terá acesso à gestão de especialidades e poderá ser agendado por clientes.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary rounded-pill">Confirmar Inscrição</button>
-        </div>
-      </form>
-    </div>
-  </div>
 </div>
 
 <!-- Modal de Agendados -->
@@ -117,14 +82,13 @@ ob_start();
             </tr>
           </thead>
           <tbody id="tabela-agendados">
-            <!-- Conteúdo será inserido via JS -->
+            <!-- Conteúdo via JS -->
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
-
 
 <script src="/js/barbeiro.js"></script>
 
