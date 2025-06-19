@@ -18,6 +18,7 @@ if (!$nome || !$email || !$senha) {
     exit;
 }
 
+$pdo = require __DIR__ . '/../config/database.php';
 // Verificar se o e-mail já está cadastrado
 $stmt = $pdo->prepare('SELECT id FROM clientes WHERE email = ?');
 $stmt->execute([$email]);
