@@ -19,6 +19,29 @@ class AdminController {
         $this->barbeiroEspecialidadeModel = new BarbeiroEspecialidade($pdo);
     }
 
+    /**
+     * Exibe a dashboard administrativa com lista de barbeiros e clientes.
+     * 
+     * ### Descrição:
+     * - Verifica se o usuário autenticado é um administrador.
+     * - Se não for, retorna HTTP 403 (Acesso Negado).
+     * - Busca todos os barbeiros (com suas especialidades) e clientes cadastrados.
+     * - Renderiza a view `administrador/index` com os dados.
+     * 
+     * ### Requisitos:
+     * - O usuário deve estar logado e ter perfil 'admin'.
+     * - As tabelas `barbeiros` e `clientes` devem existir no banco de dados.
+     * 
+     * @return void
+     * 
+     * @throws PDOException Se houver erro ao consultar o banco de dados.
+     * @throws Exception Se a sessão do usuário for inválida.
+     * 
+     * @uses Barbeiro::listarTodosComEspecialidades() Para obter a lista de barbeiros.
+     * @uses renderView() Para renderizar a view com os dados.
+     * 
+     * @security HTTP 403 se o usuário não for admin.
+     */
     public function index()
     {
         $_SESSION = autenticarUsuario();
