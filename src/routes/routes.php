@@ -61,6 +61,7 @@ $routes = [
         '/ajax/especialidades/editar'         => fn() => $ajaxController->editarEspecialidade(),
         '/ajax/especialidades/excluir'        => fn() => $ajaxController->excluirEspecialidade(),
         '/ajax/barbeiros/criar'               => fn() => $ajaxController->criarBarbeiro(),
+        '/ajax/barbeiros/editar'              => fn() => $ajaxController->editarBarbeiro(),
 
     ]
 ];

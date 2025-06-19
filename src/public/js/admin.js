@@ -104,8 +104,11 @@ function salvarBarbeiro(event) {
   const clienteId = document.getElementById('cliente_id').value;
   const idade = document.getElementById('idade').value;
   const dataContratacao = document.getElementById('data_contratacao').value;
+  const barbeiroIdHidden = document.getElementById('barbeiro_cliente_id').value;
 
-  fetch('/ajax/barbeiros/criar', {
+  const isEdicao = barbeiroIdHidden !== '';
+
+  fetch(isEdicao ? '/ajax/barbeiros/editar' : '/ajax/barbeiros/criar', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -117,14 +120,40 @@ function salvarBarbeiro(event) {
   .then(res => res.json())
   .then(data => {
     if (data.sucesso) {
-      alert('Barbeiro cadastrado com sucesso!');
+      alert(isEdicao ? 'Barbeiro atualizado com sucesso!' : 'Barbeiro cadastrado com sucesso!');
       location.reload();
     } else {
-      alert('Erro ao cadastrar barbeiro: ' + data.mensagem);
+      alert('Erro: ' + data.mensagem);
     }
-  })
-  .catch(err => {
-    console.error('Erro na requisição:', err);
-    alert('Erro na requisição.');
   });
 }
+
+
+function abrirModalEditarBarbeiro(clienteId, nome, idade, dataContratacao) {
+  document.getElementById('titulo-modal-barbeiro').textContent = 'Editar Barbeiro';
+  document.getElementById('barbeiro_cliente_id').value = clienteId;
+  
+  const selectCliente = document.getElementById('cliente_id');
+  const inputNome = document.getElementById('nome_cliente');
+  
+  // Preenche e bloqueia o cliente
+  for (let option of selectCliente.options) {
+    if (option.value == clienteId) {
+      option.selected = true;
+      inputNome.value = option.getAttribute('data-nome');
+      break;
+    }
+  }
+  selectCliente.disabled = true;
+  
+  document.getElementById('idade').value = idade;
+  document.getElementById('data_contratacao').value = dataContratacao;
+
+  const modal = new bootstrap.Modal(document.getElementById('modalBarbeiro'));
+  modal.show();
+}
+
+document.getElementById('modalBarbeiro').addEventListener('hidden.bs.modal', () => {
+  document.getElementById('cliente_id').disabled = false;
+});
+

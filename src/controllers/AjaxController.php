@@ -357,9 +357,32 @@ class AjaxController
         // Verifica se deu certo
         if ($sucesso) {
             echo json_encode(["Barbeiro cadastrado com sucesso!" => true]);
+            return;
         } else {
             echo json_encode(["Erro ao cadastrar barbeiro" . implode (", ", $stmt->errorInfo()) => true]);
         }
     }
+
+    public function editarBarbeiro() {
+        $dados = json_decode(file_get_contents('php://input'), true);
+
+        $cliente_id = $dados['cliente_id'] ?? null;
+        $idade = $dados['idade'] ?? null;
+        $data = $dados['data_contratacao'] ?? null;
+
+        if (!$cliente_id || !$idade || !$data) {
+            http_response_code(400);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Dados incompletos']);
+            return;
+        }
+
+        $pdo = require __DIR__ . '/../config/database.php';
+
+        $stmt = $pdo->prepare("UPDATE barbeiros SET idade = ?, data_contratacao = ? WHERE cliente_id = ?");
+        $sucesso = $stmt->execute([$idade, $data, $cliente_id]);
+
+        echo json_encode(['sucesso' => $sucesso]);
+    }
+
 
 }

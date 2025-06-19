@@ -58,7 +58,16 @@ ob_start();
                       : '<span class="text-muted">Nenhuma</span>' ?>
                     </td>
                     <td class="text-end">
-                      <button class="btn btn-sm btn-outline-primary me-1" title="Editar"><i class="bi bi-pencil"></i></button>
+                      
+                      <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditarBarbeiro(
+                        <?= $barbeiro['id'] ?>,
+                        '<?= htmlspecialchars($barbeiro['nome']) ?>',
+                        <?= $barbeiro['idade'] ?>,
+                        '<?= $barbeiro['data_contratacao'] ?>'
+                      )">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+
                       <button class="btn btn-sm btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></button>
                     </td>
                   </tr>
