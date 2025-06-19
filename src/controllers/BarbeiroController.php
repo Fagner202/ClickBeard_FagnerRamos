@@ -19,6 +19,13 @@ class BarbeiroController
         $this->barbeiroEspecialidadeModel = new BarbeiroEspecialidade($pdo);
     }
 
+    /**
+     * Exibe a página inicial do barbeiro com suas especialidades e valores.
+     * Requer autenticação do usuário.
+     * Renderiza a view 'barbeiro/index' com dados do barbeiro, especialidades e vínculos.
+     *
+     * @return void
+     */
     function index()
     {
         $usuario = autenticarUsuario();
@@ -42,7 +49,13 @@ class BarbeiroController
         ], false);
     }
 
-
+    /**
+     * Cria um novo barbeiro ou reativa um barbeiro inativo.
+     * Espera receber POST com cliente_id, idade e data_contratacao.
+     * Redireciona para /barbeiro com mensagem de sucesso ou erro via sessão.
+     *
+     * @return void
+     */
     public function create()
     {
         session_start();
@@ -81,6 +94,13 @@ class BarbeiroController
         exit;
     }
 
+    /**
+     * Inativa o perfil de barbeiro de um cliente.
+     * Espera receber POST com cliente_id.
+     * Redireciona para /barbeiro com mensagem de sucesso ou erro via sessão.
+     *
+     * @return void
+     */
     public function inativar()
     {
         session_start();
