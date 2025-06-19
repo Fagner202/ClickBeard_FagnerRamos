@@ -58,7 +58,6 @@ ob_start();
                       : '<span class="text-muted">Nenhuma</span>' ?>
                     </td>
                     <td class="text-end">
-                      
                       <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEditarBarbeiro(
                         <?= $barbeiro['id'] ?>,
                         '<?= htmlspecialchars($barbeiro['nome']) ?>',
@@ -68,7 +67,9 @@ ob_start();
                         <i class="bi bi-pencil"></i>
                       </button>
 
-                      <button class="btn btn-sm btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></button>
+                     <button class="btn btn-sm btn-outline-danger" onclick="confirmarExclusaoBarbeiro(<?= $barbeiro['id'] ?>, '<?= htmlspecialchars($barbeiro['nome']) ?>')">
+                      <i class="bi bi-trash"></i>
+                    </button>
                     </td>
                   </tr>
                 <?php endforeach; ?>

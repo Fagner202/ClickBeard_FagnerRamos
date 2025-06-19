@@ -157,3 +157,27 @@ document.getElementById('modalBarbeiro').addEventListener('hidden.bs.modal', () 
   document.getElementById('cliente_id').disabled = false;
 });
 
+function confirmarExclusaoBarbeiro(clienteId, nome) {
+  if (!confirm(`Tem certeza que deseja remover ${nome} como barbeiro?`)) return;
+
+  fetch('/ajax/barbeiros/excluir', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cliente_id: clienteId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.sucesso) {
+      alert('Barbeiro removido com sucesso.');
+      location.reload();
+    } else {
+      alert('Erro ao excluir: ' + data.mensagem);
+    }
+  })
+  .catch(error => {
+    console.error('Erro ao excluir barbeiro:', error);
+    alert('Erro interno ao excluir.');
+  });
+}
+
+

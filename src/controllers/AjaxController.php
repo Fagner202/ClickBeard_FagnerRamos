@@ -384,5 +384,23 @@ class AjaxController
         echo json_encode(['sucesso' => $sucesso]);
     }
 
+    public function excluirBarbeiro() {
+        $dados = json_decode(file_get_contents('php://input'), true);
+        $cliente_id = $dados['cliente_id'] ?? null;
+
+        if (!$cliente_id) {
+            http_response_code(400);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'ID inválido']);
+            return;
+        }
+
+        $pdo = require __DIR__ . '/../config/database.php';
+        $stmt = $pdo->prepare("DELETE FROM barbeiros WHERE cliente_id = ?");
+        $sucesso = $stmt->execute([$cliente_id]);
+
+        echo json_encode(['sucesso' => $sucesso]);
+    }
+
+
 
 }
