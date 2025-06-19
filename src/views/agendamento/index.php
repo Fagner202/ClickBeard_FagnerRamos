@@ -1,51 +1,56 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../utils/utils.php';
-
 $usuario = autenticarUsuario();
-
-// dd($barbeiros);
-
 ob_start();
 ?>
 
 <div class="container mt-5">
+
   <!-- Título da página -->
   <div class="text-center mb-5">
     <h1 class="display-5 fw-bold text-primary">
       <i class="bi bi-calendar-check"></i> Gerenciar Agendamentos
     </h1>
     <p class="lead">Escolha um barbeiro e agende um horário com facilidade.</p>
-    <p class="text-muted">Bem-vindo, <strong><?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></strong>
+    <p class="text-muted">
+      Bem-vindo, <strong><?= htmlspecialchars($usuario['nome'] ?? 'Desconhecido') ?></strong>
       <button class="btn btn-primary btn-sm ms-2" onclick="abrirMeusAgendamentos()">
         <i class="bi bi-calendar-week"></i> Meus Agendamentos
       </button>
     </p>
   </div>
 
-  <!-- Lista de barbeiros -->
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <?php foreach ($barbeiros as $barbeiro): ?>
-      <div class="col">
-        <div class="card shadow-sm h-100 border-0 rounded-4">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title text-primary text-center fw-bold mb-3">
-              <?= htmlspecialchars($barbeiro['nome']) ?>
-            </h5>
-
-            <span class="badge bg-success mb-4">
-              <?= htmlspecialchars(ucfirst($barbeiro['status'])) ?>
-            </span>
-
-            <button 
-              class="btn btn-outline-primary mt-auto rounded-pill" 
-              onclick="abrirModalAgendamento(<?= $barbeiro['cliente_id'] ?>)">
-              <i class="bi bi-calendar-check"></i> Agendar com <?= htmlspecialchars($barbeiro['nome']) ?>
-            </button>
-          </div>
-        </div>
-      </div>
-    <?php endforeach; ?>
+  <!-- Tabela de barbeiros -->
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Nome</th>
+          <th>Status</th>
+          <th class="text-end">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($barbeiros as $barbeiro): ?>
+          <tr>
+            <td class="fw-semibold"><?= htmlspecialchars($barbeiro['nome']) ?></td>
+            <td>
+              <span class="badge <?= $barbeiro['status'] === 'ativo' ? 'bg-success' : 'bg-secondary' ?>">
+                <?= ucfirst(htmlspecialchars($barbeiro['status'])) ?>
+              </span>
+            </td>
+            <td class="text-end">
+              <button 
+                class="btn btn-sm btn-outline-primary rounded-pill"
+                onclick="abrirModalAgendamento(<?= $barbeiro['cliente_id'] ?>)">
+                <i class="bi bi-calendar-plus"></i> Agendar
+              </button>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
   </div>
 </div>
 
