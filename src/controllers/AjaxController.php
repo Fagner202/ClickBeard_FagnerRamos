@@ -162,9 +162,30 @@ class AjaxController
             return;
         }
 
-        dd('Horario correto');
+        // Verificar conflito de agendamento (30 minutos por atendimento)
+        $inicio = $data_hora;
+        $fim = date('Y-m-d H:i:s', strtotime($data_hora . ' +30 minutes'));
 
-        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+        $pdo = require __DIR__ . '/../config/database.php';
+        $stmt = $pdo->prepare("
+            SELECT COUNT(*) FROM agendamentos 
+            WHERE barbeiro_id = ?
+            AND status = 'aberto'
+            AND cancelado = 0
+            AND data_hora < ?
+            AND DATE_ADD(data_hora, INTERVAL 30 MINUTE) > ?
+        ");
+        $stmt->execute([$barbeiro_id, $fim, $inicio]);
+        $conflito = $stmt->fetchColumn();
+
+        if ($conflito > 0) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Este horário já está reservado para outro atendimento.']);
+            return;
+        }
+
+        // Criação do agendamento
+        $model = new Agendamento($pdo);
         $sucesso = $model->criar($cliente_id, $barbeiro_id, $especialidade_id, $data_hora);
 
         echo json_encode([
@@ -172,6 +193,7 @@ class AjaxController
             'mensagem' => $sucesso ? 'Agendamento realizado com sucesso!' : 'Erro ao criar agendamento.'
         ]);
     }
+
 
 
     /**
