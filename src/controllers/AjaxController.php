@@ -222,18 +222,40 @@ class AjaxController
         require_once __DIR__ . '/../models/Agendamento.php';
         $dados = json_decode(file_get_contents('php://input'), true);
         $usuario = autenticarUsuario();
-        
+
         $agendamentoId = $dados['agendamento_id'] ?? null;
-        
+
         if (!$agendamentoId) {
             http_response_code(400);
             echo json_encode(['erro' => 'ID do agendamento não fornecido.']);
             return;
         }
-        
+
         $model = new Agendamento(require __DIR__ . '/../config/database.php');
+
+        // Busca o agendamento com status aberto e não cancelado
+        $agendamento = $model->buscarPorIdECliente($agendamentoId, $usuario['id']);
+
+        if (!$agendamento) {
+            http_response_code(404);
+            echo json_encode(['erro' => 'Agendamento não encontrado ou já cancelado.']);
+            return;
+        }
+
+        $dataHoraAgendada = new DateTime($agendamento['data_hora']);
+        $agora = new DateTime();
+
+        $diferencaEmSegundos = $dataHoraAgendada->getTimestamp() - $agora->getTimestamp();
+
+        if ($diferencaEmSegundos < 7200) { // 2 horas = 7200 segundos
+            http_response_code(400);
+            echo json_encode(['erro' => 'Cancelamento não permitido. Ele deve ser feito com pelo menos 2 horas de antecedência.']);
+            return;
+        }
+
+        // Realiza o cancelamento
         $sucesso = $model->cancelar($agendamentoId, $usuario['id']);
-        
+
         echo json_encode([
             'sucesso' => $sucesso,
             'mensagem' => $sucesso ? 'Agendamento cancelado com sucesso!' : 'Erro ao cancelar agendamento.'

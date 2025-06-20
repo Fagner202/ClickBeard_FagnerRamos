@@ -42,11 +42,13 @@ class Agendamento
         if (!$stmtVerifica->fetch()) {
             return false;
         }
-        
-        $sql = "UPDATE agendamentos SET status = 'Cancelado' WHERE id = ?";
+
+        // Atualiza apenas a flag de cancelamento, mantendo o status como 'aberto'
+        $sql = "UPDATE agendamentos SET cancelado = 1 WHERE id = ?";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$agendamentoId]);
     }
+
 
     public function buscarPorIdEUsuario($agendamentoId, $usuarioId)
     {
@@ -132,6 +134,14 @@ class Agendamento
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function buscarPorIdECliente($id, $clienteId)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM agendamentos WHERE id = ? AND cliente_id = ? AND cancelado = 0 AND status = 'aberto'");
+        $stmt->execute([$id, $clienteId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 
 }
