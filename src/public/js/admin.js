@@ -180,4 +180,51 @@ function confirmarExclusaoBarbeiro(clienteId, nome) {
   });
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  const tabelaAgendamentos = document.querySelector('#tabela-agendamentos tbody');
+
+  if (tabelaAgendamentos) {
+    fetch('/ajax/agendamentos-admin')
+      .then(res => res.json())
+      .then(agendamentos => {
+        tabelaAgendamentos.innerHTML = '';
+
+        if (agendamentos.length === 0) {
+          tabelaAgendamentos.innerHTML = `
+            <tr><td colspan="8" class="text-center text-muted">Nenhum agendamento encontrado.</td></tr>
+          `;
+          return;
+        }
+
+        agendamentos.forEach(ag => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${ag.id}</td>
+            <td>${ag.cliente}</td>
+            <td>${ag.barbeiro}</td>
+            <td>${ag.especialidade}</td>
+            <td>${ag.data_hora}</td>
+            <td><span class="badge ${ag.status === 'aberto' ? 'bg-success' : 'bg-secondary'}">${ag.status}</span></td>
+          `;
+          tabelaAgendamentos.appendChild(tr);
+        });
+      })
+      .catch(err => {
+        console.error('Erro ao buscar agendamentos:', err);
+        tabelaAgendamentos.innerHTML = `
+          <tr><td colspan="8" class="text-danger text-center">Erro ao carregar agendamentos.</td></tr>
+        `;
+      });
+  }
+});
+
+// Funções futuras (placeholder por enquanto)
+function finalizarAgendamento(id) {
+  alert(`Finalizar agendamento ID: ${id} (backend em construção)`);
+}
+
+function cancelarAgendamento(id) {
+  alert(`Cancelar agendamento ID: ${id} (backend em construção)`);
+}
+
 

@@ -528,6 +528,18 @@ class AjaxController
         echo json_encode(['sucesso' => $sucesso]);
     }
 
+    public function listarAgendamentosAdmin()
+    {
+        require_once __DIR__ . '/../models/Agendamento.php';
+        $model = new Agendamento(require __DIR__ . '/../config/database.php');
+
+        $agendamentos = $model->listarTodosAdmin();
+
+        header('Content-Type: application/json');
+        echo json_encode($agendamentos);
+    }
+
+
 
 
 }

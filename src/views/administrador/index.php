@@ -120,8 +120,8 @@ ob_start();
                   <th>Especialidade</th>
                   <th>Data/Hora</th>
                   <th>Status</th>
-                  <th>Cancelado</th>
-                  <th class="text-end">Ações</th>
+                  <!-- <th>Cancelado</th> -->
+                  <!-- <th class="text-end">Ações</th> -->
                 </tr>
               </thead>
               <tbody>

@@ -112,4 +112,26 @@ class Agendamento
         return $stmt->execute(['id' => $agendamento_id]);
     }
 
+    public function listarTodosAdmin()
+    {
+        $sql = "
+            SELECT 
+                a.id,
+                c.nome AS cliente,
+                b.nome AS barbeiro,
+                e.nome AS especialidade,
+                a.data_hora,
+                a.status,
+                a.cancelado
+            FROM agendamentos a
+            JOIN clientes c ON a.cliente_id = c.id
+            JOIN clientes b ON a.barbeiro_id = b.id
+            JOIN especialidades e ON a.especialidade_id = e.id
+            ORDER BY a.data_hora DESC
+        ";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 }
