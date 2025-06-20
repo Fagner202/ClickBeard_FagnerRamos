@@ -20,6 +20,9 @@ ob_start();
     <button class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#collapseEspecialidades" aria-expanded="false" aria-controls="collapseEspecialidades">
       💈 Gerenciar Especialidades
     </button>
+    <button class="btn btn-outline-info" data-bs-toggle="collapse" data-bs-target="#collapseAgendamentos" aria-expanded="false" aria-controls="collapseAgendamentos">
+      📅 Gerenciar Agendamentos
+    </button>
   </div>
 
   <!-- Accordion para exibir apenas uma seção por vez -->
@@ -95,6 +98,37 @@ ob_start();
           <ul id="lista-especialidades" class="list-group">
             <!-- Preenchido via JS -->
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agendamentos -->
+    <div class="accordion-item">
+      <div id="collapseAgendamentos" class="accordion-collapse collapse" aria-labelledby="headingAgendamentos" data-bs-parent="#adminAccordion">
+        <div class="accordion-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>📅 Agendamentos</h4>
+            <!-- Botão para novo agendamento, se necessário futuramente -->
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped align-middle" id="tabela-agendamentos">
+              <thead class="table-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Barbeiro</th>
+                  <th>Especialidade</th>
+                  <th>Data/Hora</th>
+                  <th>Status</th>
+                  <th>Cancelado</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Preenchido via JavaScript -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
