@@ -146,8 +146,17 @@ ClickBeard_FagnerRamos/
 │   └── apache-php/
 │       ├── Dockerfile
 │       └── apache-config.conf
-├── src/                 # Código PHP
-│   └── index.php
+├── src/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── public/
+│   ├── routes/
+│   ├── utils/
+│   ├── vendor/
+│   ├── views/
+│   └── helpers.php
 ├── .env
 ├── docker-compose.yml
 └── README.md
