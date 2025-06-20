@@ -10,6 +10,8 @@ Sistema web simples para agendamento de serviços em uma barbearia. Os clientes 
 
 ## ⚙️ Tecnologias Utilizadas
 
+- WLS
+- UBUTUN
 - PHP 8.2
 - MySQL 8
 - Apache
@@ -44,7 +46,19 @@ DB_PASSWORD=click123
 docker-compose up -d --build
 ```
 
-### 4. Instale as dependências do Composer
+### 4. Conecte-se ao banco de dados pelo DBeaver
+
+Abra o DBeaver e crie uma nova conexão MySQL com os seguintes dados:
+
+- **Servidor:** localhost  
+- **Porta:** 3306  
+- **Banco de dados:** clickbeard  
+- **Nome de usuário:** clickuser  
+- **Senha:** clickuser  
+
+Após conectar, você poderá executar os scripts SQL e gerenciar o banco de dados.
+
+### 5. Instale as dependências do Composer
 
 Acesse o container do PHP:
 
@@ -58,7 +72,7 @@ Dentro do container, instale o pacote JWT:
 composer require firebase/php-jwt
 ```
 
-### 5. Crie as tabelas do banco de dados
+### 6. Crie as tabelas do banco de dados
 
 Abra o DBeaver (ou outro cliente de banco de dados de sua preferência), conecte-se ao banco MySQL do projeto e execute o script SQL localizado em:
 
@@ -68,7 +82,7 @@ Abra o DBeaver (ou outro cliente de banco de dados de sua preferência), conecte
 
 Isso irá criar todas as tabelas necessárias para o funcionamento do sistema.
 
-### 6. Crie o usuário administrador do sistema
+### 7. Crie o usuário administrador do sistema
 
 Após criar as tabelas, insira o usuário administrador executando o seguinte comando SQL no seu cliente de banco de dados (ex: DBeaver):
 
@@ -82,7 +96,7 @@ VALUES ('Admin', 'admin@barbearia.com', '$2y$10$8sTIXSGmKuUtHBJxCTD6tOzSMg2l2S9T
 
 ---
 
-### 7. Testando as rotas de registro e login
+### 8. Testando as rotas de registro e login
 
 Após instalar o JWT, rode o servidor embutido do PHP dentro do container:
 
@@ -142,9 +156,9 @@ ClickBeard_FagnerRamos/
 ## ✅ Funcionalidades a implementar
 
 - Ambiente Docker com PHP, MySQL e phpMyAdmin OK
-- Cadastro e login de clientes
-- Cadastro de barbeiros e especialidades
-- Agendamento com regras de negócio
-- Painel de visualização para administrador
+- Cadastro e login de clientes OK
+- Cadastro de barbeiros e especialidades OK
+- Agendamento com regras de negócio OK
+- Painel de visualização para administrador OK
 - Diagrama ER OK
 - Scripts SQL de criação do banco OK
