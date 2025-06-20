@@ -58,7 +58,31 @@ Dentro do container, instale o pacote JWT:
 composer require firebase/php-jwt
 ```
 
-### 5. Testando as rotas de registro e login
+### 5. Crie as tabelas do banco de dados
+
+Abra o DBeaver (ou outro cliente de banco de dados de sua preferência), conecte-se ao banco MySQL do projeto e execute o script SQL localizado em:
+
+```
+/database/create_tables.sql
+```
+
+Isso irá criar todas as tabelas necessárias para o funcionamento do sistema.
+
+### 6. Crie o usuário administrador do sistema
+
+Após criar as tabelas, insira o usuário administrador executando o seguinte comando SQL no seu cliente de banco de dados (ex: DBeaver):
+
+```sql
+INSERT INTO clientes (nome, email, senha, tipo)
+VALUES ('Admin', 'admin@barbearia.com', '$2y$10$8sTIXSGmKuUtHBJxCTD6tOzSMg2l2S9TAVD.hRHuTke1nMeJ6B2vi', 'admin');
+```
+
+> **Atenção:**  
+> O hash acima corresponde à senha: **123**
+
+---
+
+### 7. Testando as rotas de registro e login
 
 Após instalar o JWT, rode o servidor embutido do PHP dentro do container:
 

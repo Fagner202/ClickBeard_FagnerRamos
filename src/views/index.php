@@ -9,6 +9,7 @@ $cssPage = 'agendamentos'; // Para carregar o CSS específico
 ob_start();
 ?>
 
+<h1>Olá teste</h1>
 
 <?php
 $content = ob_get_clean();
