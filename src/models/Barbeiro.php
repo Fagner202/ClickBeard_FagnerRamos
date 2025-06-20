@@ -11,6 +11,11 @@ class Barbeiro
         $this->pdo = $pdo;
     }
 
+    /**
+     * Lista todos os barbeiros ativos com suas especialidades.
+     *
+     * @return array Lista de barbeiros ativos e suas especialidades.
+     */
     public function listarAtivos()
     {
         $sql = "SELECT 
@@ -39,6 +44,12 @@ class Barbeiro
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Verifica se um cliente é barbeiro.
+     *
+     * @param int $cliente_id ID do cliente.
+     * @return mixed Dados do barbeiro ou false se não for barbeiro.
+     */
     public function verificarSeEhBarbeiro($cliente_id)
     {
 
@@ -52,26 +63,50 @@ class Barbeiro
         return $stmt->fetch();
     }
 
+    /**
+     * Cria um novo barbeiro.
+     *
+     * @param int $cliente_id ID do cliente.
+     * @param int $idade Idade do barbeiro.
+     * @param string $data_contratacao Data de contratação (formato: 'Y-m-d').
+     * @return bool True em caso de sucesso, false caso contrário.
+     */
     public function criarBarbeiro($cliente_id, $idade, $data_contratacao)
     {
         $stmt = $this->pdo->prepare("INSERT INTO barbeiros (cliente_id, idade, data_contratacao, status) VALUES (?, ?, ?, 'ativo')");
         return $stmt->execute([$cliente_id, $idade, $data_contratacao]);
     }
 
-    // Ativar um barbeiro inativo
+    /**
+     * Ativa um barbeiro inativo.
+     *
+     * @param int $cliente_id ID do cliente.
+     * @return bool True em caso de sucesso, false caso contrário.
+     */
     public function ativarBarbeiro($cliente_id)
     {
         $stmt = $this->pdo->prepare("UPDATE barbeiros SET status = 'ativo' WHERE cliente_id = ? AND status = 'inativo'");
         return $stmt->execute([$cliente_id]);
     }
 
-    // Inativar um barbeiro ativo
+    /**
+     * Inativa um barbeiro ativo.
+     *
+     * @param int $cliente_id ID do cliente.
+     * @return bool True em caso de sucesso, false caso contrário.
+     */
     public function inativarBarbeiro($cliente_id)
     {
         $stmt = $this->pdo->prepare("UPDATE barbeiros SET status = 'inativo' WHERE cliente_id = ? AND status = 'ativo'");
         return $stmt->execute([$cliente_id]);
     }
 
+    /**
+     * Retorna os dados de um barbeiro pelo ID do cliente.
+     *
+     * @param int $cliente_id ID do cliente.
+     * @return mixed Dados do barbeiro ou false se não encontrado.
+     */
     public function retornaBarbeiro($cliente_id)
     {
         $sql = "SELECT * FROM barbeiros b WHERE b.cliente_id = ?";
@@ -80,12 +115,22 @@ class Barbeiro
         return $stmt->fetch();
     }
 
+    /**
+     * Retorna todos os barbeiros com dados do cliente.
+     *
+     * @return array Lista de barbeiros.
+     */
     public function getAll()
     {
         $stmt = $this->pdo->query("SELECT * FROM barbeiros LEFT JOIN clientes c ON c.id = barbeiros.cliente_id");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Lista todos os barbeiros com status 'Ativo'.
+     *
+     * @return array Lista de barbeiros ativos.
+     */
     public function listarAtivosV2()
     {
         $sql = "SELECT * FROM barbeiros WHERE status = 'Ativo'";
@@ -93,6 +138,11 @@ class Barbeiro
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Lista todos os barbeiros com suas especialidades.
+     *
+     * @return array Lista de barbeiros e suas especialidades.
+     */
     public function listarTodosComEspecialidades()
     {
         $sql = "
