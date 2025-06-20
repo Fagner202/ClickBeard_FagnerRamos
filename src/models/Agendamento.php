@@ -24,6 +24,7 @@ class Agendamento
                 FROM agendamentos a
                 LEFT JOIN especialidades e ON a.especialidade_id = e.id
                 WHERE a.cliente_id = ?
+                AND a.cancelado = 0;
                 ORDER BY a.data_hora ASC";
         
         $stmt = $this->pdo->prepare($sql);
