@@ -12,9 +12,9 @@ CREATE TABLE barbeiros (
     cliente_id INT PRIMARY KEY,
     idade INT NOT NULL,
     data_contratacao DATE NOT NULL,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
+    status ENUM('ativo', 'inativo') DEFAULT 'ativo',
 );
-
 CREATE TABLE especialidades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
