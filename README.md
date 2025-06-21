@@ -26,7 +26,7 @@ Sistema web simples para agendamento de serviços em uma barbearia. Os clientes 
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/ClickBeard_FagnerRamos.git
+git clone https://github.com/Fagner202/ClickBeard_FagnerRamos.git
 cd ClickBeard_FagnerRamos
 ```
 ### 2. Configure as variáveis de ambiente
