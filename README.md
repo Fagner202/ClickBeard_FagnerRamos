@@ -63,7 +63,7 @@ Após conectar, você poderá executar os scripts SQL e gerenciar o banco de dad
 Acesse o container do PHP:
 
 ```bash
-docker exec -it clickbeard_php bash
+docker exec -it clickbeard_app bash
 ```
 
 Dentro do container, instale o pacote JWT:

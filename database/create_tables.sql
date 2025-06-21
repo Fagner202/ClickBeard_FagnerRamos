@@ -29,8 +29,6 @@ CREATE TABLE barbeiro_especialidade (
     FOREIGN KEY (especialidade_id) REFERENCES especialidades(id)
 );
 
-
-
 CREATE TABLE agendamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT,
